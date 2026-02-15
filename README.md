@@ -105,3 +105,66 @@ Cornwall residents without reliable transport and community-minded drivers happy
 **Sprint 2 (Days 6–10):** Stories 11–13, 16–17, 21–22 (🟡 Should Haves + remaining 🔴s)
 
 > **Tip:** Focus exclusively on 🔴 Must Haves first. Only move to 🟡 Should Haves once all Must Haves are complete and working on the deployed site.
+
+erDiagram
+USER {
+int id PK
+string username
+string email
+string password
+boolean is_staff
+boolean is_active
+datetime date_joined
+}
+
+    USERPROFILE {
+        int id PK
+        int user_id FK
+        string name
+        string location
+        text bio
+        datetime created_on
+        datetime updated_on
+    }
+
+    RIDE {
+        int id PK
+        int driver_id FK
+        string origin
+        string destination
+        date date
+        time time
+        int seats_available
+        decimal contribution
+        text pickup_notes
+        int status
+        datetime created_on
+        datetime updated_on
+    }
+
+    RIDEREQUEST {
+        int id PK
+        int ride_id FK
+        int passenger_id FK
+        int status
+        datetime created_on
+        datetime updated_on
+    }
+
+    RATING {
+        int id PK
+        int reviewer_id FK
+        int driver_id FK
+        int ride_id FK
+        int score
+        text comment
+        datetime created_on
+    }
+
+    USER ||--o| USERPROFILE : "has"
+    USER ||--o{ RIDE : "creates as driver"
+    USER ||--o{ RIDEREQUEST : "makes as passenger"
+    USER ||--o{ RATING : "writes as reviewer"
+    USER ||--o{ RATING : "receives as driver"
+    RIDE ||--o{ RIDEREQUEST : "has"
+    RIDE ||--o{ RATING : "has"
