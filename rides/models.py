@@ -11,11 +11,13 @@ SEATS_AVAILABLE = ((0, '0 seats'),
                    (4, '4 seats'), 
                    (5, '5 seats'),)
 
-STATUS = (('0', 'Pending'),
-          ('1', 'Accepted'),
-          ('2', 'Rejected'),
-          ('3', 'Cancelled'),
-          ('4', 'Completed'),)
+RIDES_STATUS = (('0', 'Draft'), ('1', 'Published'), ('2', 'Cancelled'))
+                
+REQUEST_STATUS = (('0', 'Pending'),
+                  ('1', 'Accepted'),
+                  ('2', 'Rejected'),
+                  ('3', 'Cancelled'),
+                  ('4', 'Completed'),)
 
 def validate_future_date(value):
     """Ensure ride date is in the future."""
@@ -33,6 +35,7 @@ class Rides(models.Model):
     date = models.DateTimeField(validators=[validate_future_date])
     seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=0)
     pickup_notes = models.TextField(blank=True)
+    status = models.CharField(max_length=1, choices=RIDES_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     
@@ -55,7 +58,7 @@ class RideRequest(models.Model):
     """
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride_requests_as_passenger')
     ride = models.ForeignKey(Rides, on_delete=models.CASCADE, related_name='ride_requests')
-    status = models.CharField(max_length=1, choices=STATUS, default='0')
+    status = models.CharField(max_length=1, choices=REQUEST_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
