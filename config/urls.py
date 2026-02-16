@@ -20,5 +20,6 @@ from rides import urls as rides_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("accounts/", include("allauth.urls")),
     path('', include(rides_urls), name='rides'), # the app urls are loaded as the main urls
 ]
