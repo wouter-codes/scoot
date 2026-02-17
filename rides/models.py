@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.validators import MinValueValidator
 from cloudinary.models import CloudinaryField
 
-SEATS_AVAILABLE = ((0, '0 seats'), 
+SEATS_AVAILABLE = ((0, '0 seats'),
                    (1, '1 seat'), 
                    (2, '2 seats'), 
                    (3, '3 seats'), 
@@ -33,7 +34,7 @@ class Rides(models.Model):
     origin = models.CharField(max_length=255)
     destination = models.CharField(max_length=255)
     date = models.DateTimeField(validators=[validate_future_date])
-    seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=0)
+    seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=1, validators=[MinValueValidator(1)])
     pickup_notes = models.TextField(blank=True)
     status = models.CharField(max_length=1, choices=RIDES_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
@@ -47,10 +48,11 @@ class Rides(models.Model):
         
     class Meta:
         ordering = ['-created_on']
+        verbose_name_plural = 'Rides' # ensures the plural form is correct in the admin interface
 
     def __str__(self):
         date_str = self.date.strftime('%Y-%m-%d %H:%M') if self.date else 'TBD'
-        return f"Ride from {self.origin} to {self.destination} on {date_str} - {self.seats_available} seats"
+        return f"{self.origin} to {self.destination} on {date_str} - {self.seats_available} seats"
     
 class RideRequest(models.Model):
     """
