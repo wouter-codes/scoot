@@ -1,0 +1,58 @@
+/* CSS Variables for consistent styling */
+:root {
+    /* Typography */
+    --primary-font: "Lexend", sans-serif;
+    --secondary-font: "Roboto", sans-serif;
+    --tertiary-font: "Dokdo", serif;
+
+    /* Text colours */
+    --primary-color: #1b1c1e; /* Carbon Black */
+    --secondary-color: #111212; /* Onyx Black (darker) */
+    --third-color: #ffffff; /* White */
+    --fourth-color: #f7fcff; /* Alice Blue (Darker White) */
+    --fifth-color: #beddea; /* Pale Skye */
+
+    /* Background colours */
+    --background-color-primary: #f7fcff; /* Alice Blue (White) */
+    --background-color-secondary: #02374f; /* Deep Space Blue */
+    --background-color-tertiary: #0e5c81; /* Charcoal Blue */
+}
+
+/* GLOBAL STYLES */
+body {
+    font-family: var(--secondary-font);
+    color: var(--primary-color);
+    padding-top: 57.52px; /* Adjusted for navbar height */
+    background-color: var(--background-color-primary);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+}
+
+/* NAVBAR */
+#navbar {
+    background-color: var(--background-color-secondary);
+    color: var(--third-color);
+}
+
+#navbar .logo {
+    width: 50px;
+}
+
+.socials i {
+    color: var(--third-color);
+}
+
+.socials i:hover {
+    color: var(--fifth-color);
+}
+
+/* FOOTER */
+.footer {
+    background-color: var(--background-color-tertiary);
+    color: var(--fourth-color);
+}

@@ -10,12 +10,12 @@
     --secondary-color: #111212; /* Onyx Black (darker) */
     --third-color: #ffffff; /* White */
     --fourth-color: #f7fcff; /* Alice Blue (Darker White) */
+    --fifth-color: #beddea; /* Pale Skye */
 
     /* Background colours */
     --background-color-primary: #f7fcff; /* Alice Blue (White) */
     --background-color-secondary: #02374f; /* Deep Space Blue */
-    --background-color-tertiary: #114358; /* Charcoal Blue */
-    --background-color-quaternary: #a7c49c; /* Slightly Light Beige Green */
+    --background-color-tertiary: #0e5c81; /* Charcoal Blue */
 }
 
 /* GLOBAL STYLES */
@@ -30,14 +30,29 @@ h1,
 h2,
 h3 {
     font-family: var(--primary-font);
-    color: var(--fourth-color);
+    color: var(--primary-color);
 }
 
 /* NAVBAR */
 #navbar {
     background-color: var(--background-color-secondary);
+    color: var(--third-color);
 }
 
-/* #navbar .logo {
-    width: 30px;
-} */
+#navbar .logo {
+    width: 50px;
+}
+
+.socials i {
+    color: var(--third-color);
+}
+
+.socials i:hover {
+    color: var(--fifth-color);
+}
+
+/* FOOTER */
+.footer {
+    background-color: var(--background-color-tertiary);
+    color: var(--fourth-color);
+}

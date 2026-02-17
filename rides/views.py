@@ -4,8 +4,8 @@ from django.http import HttpResponse
 from .models import Rides, RideRequest, UserProfile
 
 def index(request):
-    """HTTP request for text"""
-    return HttpResponse("Hello, world.")
+    """Render the home page"""
+    return render(request, 'rides/index.html')
 
 # Create your views here.
 # class PostList(generic.ListView):

@@ -1,4 +1,7 @@
 {% load static %}
+{% url 'home' as home_url %} {% url 'about' as about_url %}
+{% url 'account_login' as login_url %} {% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
 
 <!doctype html>
 <html class="h-100" lang="en">
@@ -54,13 +57,12 @@
         <!-- Navigation -->
         <nav
             id="navbar"
-            class="navbar navbar-expand-lg fixed-top"
-            data-bs-theme="dark"
+            class="navbar navbar-expand-sm fixed-top navbar-dark"
         >
             <div class="container">
-                <a class="navbar-brand" href="index.html"
+                <a class="navbar-brand" href="{{ home_url }}"
                     ><img
-                        src="{% static 'images/logo-sm-white.png' %}"
+                        src="{% static 'images/scoot_logo_bg_tp_white_small.png' %}"
                         alt="Scoot Logo"
                         class="logo"
                 /></a>
@@ -76,30 +78,51 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto gap-3 gap-lg-0">
                         <li class="nav-item">
-                            <a
-                                class="nav-link active"
-                                aria-current="page"
-                                href="index.html"
-                                >Home</a
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">My Rides</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#eents"
+                                >My Ride Requests</a
                             >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Services</a>
+                            <a
+                                href="#"
+                                class="btn btn-outline-light rounded-circle ms-lg-3 p-2"
+                                style="width: 40px; height: 40px"
+                                title="Profile"
+                            >
+                                <i class="fas fa-user"></i>
+                            </a>
+                        </li>
+                        <p class="text-end mx-3 my-auto text-white">
+                            You are logged in as {{ user }}
+                        </p>
+                        {% else %}
+                        <li class="nav-item">
+                            <a
+                                href="{% url 'account_signup' %}"
+                                class="btn btn-outline-light ms-lg-3"
+                                >Sign Up</a
+                            >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#eents">Events</a>
+                            <a
+                                href="{% url 'account_login' %}"
+                                class="btn btn-light ms-lg-3"
+                                >Log In</a
+                            >
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="btn ms-lg-3">Sign Up</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="btn ms-lg-3">Log In</a>
-                        </li>
+                        <p class="text-end mx-3 my-auto text-white">
+                            You are not logged in
+                        </p>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -107,12 +130,55 @@
 
         <main class="flex-shrink-0 main-bg">
             <!-- Content Goes here -->
-            {% if user.is_authenticated %}
-            <p class="text-end m-3">You are logged in as {{ user }}</p>
-            {% else %}
-            <p class="text-end m-3">You are not logged in</p>
-            {% endif %} {% block content %} {% endblock content %}
+            {% block content %} {% endblock content %}
         </main>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto py-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <p
+                            class="m-0 text-center text-white d-flex align-items-centerjustify-content-center justify-content-lg-start"
+                        >
+                            Made by Wouter Klinkenberg &copy; 2026
+                        </p>
+                    </div>
+                    <div
+                        class="col-6 socials text-white d-flex align-items-center justify-content-center justify-content-lg-end gap-3"
+                    >
+                        <a
+                            href="https://www.linkedin.com"
+                            target="_blank"
+                            aria-label="Visit our LinkedIn page (opens in a new tab)"
+                            rel="noopener"
+                            ><i class="fa-brands fa-linkedin"></i
+                        ></a>
+                        <a
+                            href="https://www.facebook.com"
+                            target="_blank"
+                            aria-label="Visit our Facebook page (opens in a new tab)"
+                            rel="noopener"
+                            ><i class="fa-brands fa-facebook"></i
+                        ></a>
+                        <a
+                            href="https://www.instagram.com"
+                            target="_blank"
+                            aria-label="Visit our Instagram page (opens in a new tab)"
+                            rel="noopener"
+                            ><i class="fa-brands fa-instagram"></i
+                        ></a>
+                        <a
+                            href="https://www.youtube.com"
+                            target="_blank"
+                            aria-label="Visit our Youtube page (opens in a new tab)"
+                            rel="noopener"
+                            ><i class="fa-brands fa-youtube"></i
+                        ></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <!-- Font Awesome CSS -->
         <script
