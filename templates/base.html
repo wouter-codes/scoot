@@ -1,5 +1,6 @@
 {% load static %}
-{% url 'home' as home_url %} {% url 'about' as about_url %}
+{% url 'index' as home_url %} {% url 'about' as about_url %}
+{% url 'my_rides' as my_rides_url %} {% url 'my_ride_requests' as my_ride_requests_url %}
 {% url 'account_login' as login_url %} {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
 
@@ -80,26 +81,34 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto gap-3 gap-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link {% if request.path == about_url %}active" aria-current="page {% endif %}" 
+                            href="{{ about_url }}">About</a>
                         </li>
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My Rides</a>
+                            <a class="nav-link {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
+                            href="{{ my_rides_url }}">My Rides</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#eents"
-                                >My Ride Requests</a
-                            >
+                            <a class="nav-link {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
+                            href="{{ my_ride_requests_url }}">My Ride Requests</a>
                         </li>
-                        <li class="nav-item">
-                            <a
-                                href="#"
+                        <li class="nav-item dropdown">
+                            <button
                                 class="btn btn-outline-light rounded-circle ms-lg-3 p-2"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                                 style="width: 40px; height: 40px"
                                 title="Profile"
                             >
                                 <i class="fas fa-user"></i>
-                            </a>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
+                            </ul>
                         </li>
                         <p class="text-end mx-3 my-auto text-white">
                             You are logged in as {{ user }}
@@ -108,14 +117,14 @@
                         <li class="nav-item">
                             <a
                                 href="{% url 'account_signup' %}"
-                                class="btn btn-outline-light ms-lg-3"
+                                class="btn btn-outline-light ms-lg-3 {% if request.path == signup_url %}active" aria-current="page {% endif %}"
                                 >Sign Up</a
                             >
                         </li>
                         <li class="nav-item">
                             <a
                                 href="{% url 'account_login' %}"
-                                class="btn btn-light ms-lg-3"
+                                class="btn btn-light ms-lg-3 {% if request.path == login_url %}active" aria-current="page {% endif %}"
                                 >Log In</a
                             >
                         </li>
@@ -128,7 +137,7 @@
             </div>
         </nav>
 
-        <main class="flex-shrink-0 main-bg">
+        <main class="flex-shrink-0 main-bg mt-5">
             <!-- Content Goes here -->
             {% block content %} {% endblock content %}
         </main>
