@@ -16,6 +16,7 @@
     --background-color-primary: #f7fcff; /* Alice Blue (White) */
     --background-color-secondary: #02374f; /* Deep Space Blue */
     --background-color-tertiary: #0e5c81; /* Charcoal Blue */
+    --background-color-quaternary: #0d85bd; /* Blue Bell */
 }
 
 /* GLOBAL STYLES */
@@ -31,6 +32,23 @@ h2,
 h3 {
     font-family: var(--primary-font);
     color: var(--primary-color);
+}
+
+/* FORMS */
+/* Round corners input fields */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+    border-radius: 8px;
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--background-color-quaternary);
 }
 
 /* NAVBAR */
@@ -55,4 +73,28 @@ h3 {
 .footer {
     background-color: var(--background-color-tertiary);
     color: var(--fourth-color);
+}
+
+/* LOGIN */
+/* Hide "Forgot your password" on the login page */
+.helptext {
+    display: none;
+}
+
+/* SIGN UP */
+/* Hide email field on signup page */
+#div_id_email,
+label[for="id_email"],
+input[name="email"] {
+    display: none;
+}
+
+.custom-btn {
+    background-color: var(--background-color-tertiary);
+    color: var(--third-color);
+}
+
+.custom-btn:hover {
+    background-color: var(--background-color-quaternary);
+    color: var(--third-color);
 }
