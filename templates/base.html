@@ -3,7 +3,7 @@
 <!doctype html>
 <html class="h-100" lang="en">
     <head>
-        <title>CodeStar Blog</title>
+        <title>Scoot</title>
         <meta charset="UTF-8" />
         <meta
             name="description"
@@ -35,7 +35,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Dokdo&family=Lexend:wght@100..900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Dokdo&family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
         />
 
@@ -50,7 +50,70 @@
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     </head>
-    <body>
+    <body class="d-flex flex-column h-100 main-bg">
+        <!-- Navigation -->
+        <nav
+            id="navbar"
+            class="navbar navbar-expand-lg fixed-top"
+            data-bs-theme="dark"
+        >
+            <div class="container">
+                <a class="navbar-brand" href="index.html"
+                    ><img
+                        src="{% static 'images/logo-sm-white.png' %}"
+                        alt="Scoot Logo"
+                        class="logo"
+                /></a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="index.html"
+                                >Home</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#eents">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="btn ms-lg-3">Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="btn ms-lg-3">Log In</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-shrink-0 main-bg">
+            <!-- Content Goes here -->
+            {% if user.is_authenticated %}
+            <p class="text-end m-3">You are logged in as {{ user }}</p>
+            {% else %}
+            <p class="text-end m-3">You are not logged in</p>
+            {% endif %} {% block content %} {% endblock content %}
+        </main>
+
         <!-- Font Awesome CSS -->
         <script
             src="https://kit.fontawesome.com/2e6f8ddc3b.js"
