@@ -16,46 +16,53 @@
         <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="assets/images/apple-touch-icon.png"
+            href="{% static 'images/apple-touch-icon.png' %}"
         />
         <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="assets/images/favicon-32x32.png"
+            href="{% static 'images/favicon-32x32.png' %}"
         />
         <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="assets/images/favicon-16x16.png"
+            href="{% static 'images/favicon-16x16.png' %}"
         />
 
         <!-- Google Fonts CSS -->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Dokdo&family=Lexend:wght@100..900&display=swap"
             rel="stylesheet"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap"
-            rel="stylesheet"
-        />
-
-        <!-- Font Awesome CSS -->
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         />
 
         <!-- Bootstrap CSS -->
         <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+            integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
             crossorigin="anonymous"
         />
+
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     </head>
+    <body>
+        <!-- Font Awesome CSS -->
+        <script
+            src="https://kit.fontawesome.com/2e6f8ddc3b.js"
+            crossorigin="anonymous"
+        ></script>
+
+        <!-- Bootstrap script -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"
+        ></script>
+        <script src="{% static 'js/script.js' %}"></script>
+    </body>
 </html>
