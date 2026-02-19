@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from cloudinary.models import CloudinaryField
 
 SEATS_AVAILABLE = ((0, '0 seats'),
@@ -60,6 +60,7 @@ class RideRequest(models.Model):
     """
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride_requests_as_passenger')
     ride = models.ForeignKey(Rides, on_delete=models.CASCADE, related_name='ride_requests')
+    seats_requested = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     status = models.CharField(max_length=1, choices=REQUEST_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
