@@ -1,7 +1,49 @@
-{% extends "base.html" %} {% load static %} {% block content %}
-<!-- Your home page content here -->
+{% extends "base.html" %} {% load static %} {% load crispy_forms_tags %} {% block content %}
+<!-- Search Form Section -->
 <div class="container my-5">
-    <h1>Welcome to Scoot!</h1>
-    <p>Test content to see the footer</p>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h1>Find Your Ride</h1>
+            {% crispy form %}
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            {% if rides %}
+                <h2>Available Rides ({{ rides.count }})</h2>
+                <div class="row mt-4">
+                    {% for ride in rides %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                                <p class="card-text">
+                                    <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                                    <strong>Seats:</strong> {{ ride.seats_available }}<br>
+                                    <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}
+                                </p>
+                                {% if ride.pickup_notes %}
+                                <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading">No rides found</h4>
+                    <p>Try adjusting your search criteria or check back later.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

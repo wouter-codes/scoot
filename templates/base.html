@@ -80,10 +80,6 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto gap-3 gap-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == about_url %}active" aria-current="page {% endif %}" 
-                            href="{{ about_url }}">About</a>
-                        </li>
                         {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
@@ -146,16 +142,21 @@
         <footer class="footer mt-auto py-3">
             <div class="container">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3 mb-lg-0">
                         <p
-                            class="m-0 text-center text-white d-flex align-items-centerjustify-content-center justify-content-lg-start"
+                            class="m-0 text-center text-lg-start text-white d-flex align-items-center justify-content-center justify-content-lg-start"
                         >
                             Made by Wouter Klinkenberg &copy; 2026
                         </p>
                     </div>
-                    <div
-                        class="col-6 socials text-white d-flex align-items-center justify-content-center justify-content-lg-end gap-3"
-                    >
+                    <div class="col-6 col-md-3 col-lg-4 mb-3 mb-lg-0">
+                        <p class="m-0 text-center text-white d-flex align-items-center justify-content-center">
+                            <a href="{{ about_url }}" {% if request.path == about_url %}aria-current="page"{% endif %} class="text-white text-decoration-none {% if request.path == about_url %}fw-bold{% endif %}">About Scoot</a>
+                        </p>
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-4 mb-3 mb-lg-0">
+                        <p class="m-0 socials text-white d-flex align-items-center justify-content-center justify-content-lg-end gap-3">
+                    
                         <a
                             href="https://www.linkedin.com"
                             target="_blank"
@@ -184,6 +185,7 @@
                             rel="noopener"
                             ><i class="fa-brands fa-youtube"></i
                         ></a>
+                        </p>
                     </div>
                 </div>
             </div>
