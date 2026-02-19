@@ -1,7 +1,7 @@
 from django import forms
 from .models import Rides
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Row, Column
 
 class RideSearchForm(forms.ModelForm):
     """Form for searching rides by origin, destination, date, and min passengers."""
@@ -10,14 +10,20 @@ class RideSearchForm(forms.ModelForm):
         min_value=1,
         max_value=5,
         required=False,
-        help_text='Minimum seats needed'
+        label="Passengers",
     )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'get'
-        self.helper.add_input(Submit('submit', 'Search Rides', css_class='btn-signup w-100'))
+        self.helper.layout = Row(
+            Column('origin', css_class='col-12 col-lg-3'),
+            Column('destination', css_class='col-12 col-lg-3'),
+            Column('date', css_class='col-12 col-lg-2'),
+            Column('min_passengers', css_class='col-12 col-lg-2'),
+            Column(Submit('submit', 'Search Rides', css_class='btn-signup w-100'), css_class='col-12 col-lg-2'),
+        )
     
     class Meta:
         model = Rides
