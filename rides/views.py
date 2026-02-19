@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.http import HttpResponse
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils.html import mark_safe
+from django.urls import reverse
 from .models import Rides, RideRequest, UserProfile
 from .forms import RideSearchForm
 
@@ -35,6 +39,60 @@ def index(request):
         'rides': rides
     }
     return render(request, 'rides/index.html', context)
+
+
+def book_ride(request, ride_id):
+    """
+    Handle ride booking. Users select number of seats and confirm.
+    Redirects to signup if not logged in.
+    """
+    if not request.user.is_authenticated:
+        login_url = reverse('account_login')
+        message = f'You need to be logged in to book a ride. Sign up or <a href="{login_url}" class="link">log in</a> to continue.'
+        messages.warning(request, mark_safe(message))
+        return redirect('account_signup')
+    
+    ride = get_object_or_404(Rides, id=ride_id)
+    
+    if request.method == 'POST':
+        seats_requested = int(request.POST.get('seats_requested', 1))
+        
+        # Validate seats requested
+        if seats_requested < 1 or seats_requested > ride.seats_available:
+            context = {
+                'ride': ride,
+                'error': f'Please select between 1 and {ride.seats_available} seats'
+            }
+            return render(request, 'rides/book_ride.html', context)
+        
+        # Create the ride request
+        ride_request = RideRequest.objects.create(
+            passenger=request.user,
+            ride=ride,
+            seats_requested=seats_requested,
+            status='0'  # Pending status
+        )
+        
+        # Redirect to confirmation page
+        return redirect('ride_request_confirmation', request_id=ride_request.id)
+    
+    context = {
+        'ride': ride,
+    }
+    return render(request, 'rides/book_ride.html', context)
+
+
+@login_required(login_url='account_signup')
+def ride_request_confirmation(request, request_id):
+    """
+    Display booking confirmation page after successful booking.
+    """
+    ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
+    
+    context = {
+        'ride_request': ride_request,
+    }
+    return render(request, 'rides/ride_request_confirmation.html', context)
 
 # Create your views here.
 # class PostList(generic.ListView):

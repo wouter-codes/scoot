@@ -142,6 +142,18 @@
         </nav>
 
         <main class="flex-shrink-0 main-bg mt-5">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <!-- Content Goes here -->
             {% block content %} {% endblock content %}
         </main>

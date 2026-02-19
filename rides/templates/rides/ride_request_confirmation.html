@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6 mx-auto">
+            <!-- Success Message -->
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">✓ Booking Confirmed!</h4>
+                <p>Your booking request has been sent to the driver.</p>
+            </div>
+
+            <!-- Booking Details Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Booking Details</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Route:</strong> {{ ride_request.ride.origin }} → {{ ride_request.ride.destination }}<br>
+                        <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
+                        <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
+                        <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
+                        <strong>Status:</strong> <span class="badge bg-warning">Pending</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- What Happens Next -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">What Happens Next?</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        The driver will review your booking request. You'll be notified once they accept or decline your request.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{% url 'index' %}" class="btn btn-primary">Back to Rides</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

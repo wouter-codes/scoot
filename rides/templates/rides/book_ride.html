@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6 mx-auto">
+            <h1 class="mb-4">Confirm Your Booking</h1>
+
+            <!-- Ride Details Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                    
+                    <p class="card-text">
+                        <strong>Date & Time:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                        <strong>Available Seats:</strong> {{ ride.seats_available }}<br>
+                        <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}<br>
+                        {% if ride.pickup_notes %}
+                        <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post" class="card p-4">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="seats_requested" class="form-label">How many seats do you need?</label>
+                    <select class="form-select" id="seats_requested" name="seats_requested" required>
+                        <option value="">-- Select number of seats --</option>
+                        {% for i in "x"|rjust:ride.seats_available %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                    <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
