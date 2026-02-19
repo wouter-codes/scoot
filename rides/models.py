@@ -70,7 +70,7 @@ class RideRequest(models.Model):
         ordering = ['-created_on']
 
     def __str__(self):
-        return f"RideRequest by {self.passenger.username} for ride {self.ride.id} from {self.ride.origin} to {self.ride.destination} - Status: {self.get_status_display()}"
+        return f"Ride ID:{self.ride.id} | RideRequest by {self.passenger.username} for ride from {self.ride.origin} to {self.ride.destination} - Status: {self.get_status_display()}"
     
 class UserProfile(models.Model):
     """
