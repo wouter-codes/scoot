@@ -4,14 +4,14 @@
         <div class="col-12 col-md-8 col-lg-6 mx-auto">
             <!-- Success Message -->
             <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">✓ Booking Confirmed!</h4>
-                <p>Your booking request has been sent to the driver.</p>
+                <h4 class="alert-heading">✓ Request Sent!</h4>
+                <p>Your ride request has been sent to the driver.</p>
             </div>
 
             <!-- Booking Details Card -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Booking Details</h5>
+                    <h5 class="mb-0">Request Details</h5>
                 </div>
                 <div class="card-body">
                     <p class="card-text">
@@ -19,8 +19,12 @@
                         <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
                         <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
                         <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
-                        <strong>Status:</strong> <span class="badge bg-warning">Pending</span>
+                        <strong>Pickup Notes:</strong> {{ ride_request.ride.pickup_notes|default:"None" }}
                     </p>
+                </div>
+                <div class="card-footer">
+                    <span><strong>Status:</strong></span>
+                    <span class="badge bg-warning">Pending</span>
                 </div>
             </div>
 

@@ -54,6 +54,11 @@ def book_ride(request, ride_id):
     
     ride = get_object_or_404(Rides, id=ride_id)
     
+    # Check if ride has available seats
+    if ride.seats_available <= 0:
+        messages.error(request, 'This ride has no available seats.')
+        return redirect('index')
+    
     if request.method == 'POST':
         seats_requested = int(request.POST.get('seats_requested', 1))
         
@@ -72,6 +77,10 @@ def book_ride(request, ride_id):
             seats_requested=seats_requested,
             status='0'  # Pending status
         )
+        
+        # Decrement available seats
+        ride.seats_available -= seats_requested
+        ride.save()
         
         # Redirect to confirmation page
         return redirect('ride_request_confirmation', request_id=ride_request.id)
@@ -93,6 +102,20 @@ def ride_request_confirmation(request, request_id):
         'ride_request': ride_request,
     }
     return render(request, 'rides/ride_request_confirmation.html', context)
+
+@login_required(login_url='account_signup')
+def my_ride_requests(request):
+    """
+    Display all ride requests (bookings) for the logged-in user.
+    """
+    ride_requests = RideRequest.objects.filter(
+        passenger=request.user
+    ).select_related('ride').order_by('-ride__date')
+    
+    context = {
+        'ride_requests': ride_requests,
+    }
+    return render(request, 'rides/my_ride_requests.html', context)
 
 # Create your views here.
 # class PostList(generic.ListView):

@@ -34,7 +34,7 @@ class Rides(models.Model):
     origin = models.CharField(max_length=255)
     destination = models.CharField(max_length=255)
     date = models.DateTimeField(validators=[validate_future_date])
-    seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=1, validators=[MinValueValidator(1)])
+    seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=1)
     pickup_notes = models.TextField(blank=True)
     status = models.CharField(max_length=1, choices=RIDES_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
