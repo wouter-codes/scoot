@@ -61,6 +61,25 @@ select:focus {
     width: 50px;
 }
 
+/* Nav link hover effect on small screens */
+@media (max-width: 575.98px) {
+    #navbar .nav-link:hover {
+        font-weight: bold;
+        color: var(--fourth-color);
+    }
+}
+
+/* Button border radius */
+.btn {
+    border-radius: 20px;
+}
+
+#logo-title {
+    font-family: var(--tertiary-font);
+    font-size: 3rem;
+    line-height: 0;
+}
+
 .socials i {
     color: var(--third-color);
 }

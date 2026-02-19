@@ -67,7 +67,7 @@
                         alt="Scoot Logo"
                         class="logo"
                     />
-                    <span class="ms-3 text-white">Scoot</span>
+                    <span class="ms-3 text-white" id="logo-title">Scoot</span>
                 </a>
                 <button
                     class="navbar-toggler"
@@ -84,14 +84,19 @@
                     <ul class="navbar-nav ms-auto gap-3 gap-lg-0">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
+                            <a class="nav-link d-sm-none {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
+                            href="{{ my_rides_url }}">My Rides</a>
+                            <a class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
                             href="{{ my_rides_url }}">My Rides</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
+                            <a class="nav-link d-sm-none {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
                             href="{{ my_ride_requests_url }}">My Ride Requests</a>
-                        </li>
-                        <li class="nav-item dropdown">
+                            <a class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
+                            href="{{ my_ride_requests_url }}">My Ride Requests</a>
+                        </li>                       
+                        <!-- Profile dropdown - visible when navbar is expanded (sm and up) -->
+                        <li class="nav-item dropdown d-none d-sm-block">
                             <button
                                 class="btn btn-outline-light rounded-circle ms-lg-3 p-2"
                                 type="button"
@@ -107,6 +112,13 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
                             </ul>
+                        </li>
+                        <!-- Profile and Logout links - visible when hamburger menu is active (below sm) -->
+                        <li class="nav-item d-sm-none">
+                            <a class="nav-link" href="#">Profile</a>
+                        </li>
+                        <li class="nav-item d-sm-none">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
