@@ -2,7 +2,7 @@
 <!-- Search Form Section -->
 <div class="container my-5">
     <div class="row">
-        <div class="col-md-10 offset-md-1">
+        <div class="col-12">
             <h1>Find Your Ride</h1>
             {% crispy form %}
         </div>
@@ -12,13 +12,15 @@
 <!-- Results Section -->
 <div class="container my-5">
     <div class="row">
-        <div class="col-md-10 offset-md-1">
+        <div class="col-12 text-center">
             {% if rides %}
                 <h2>Available Rides ({{ rides.count }})</h2>
-                <div class="row mt-4">
-                    {% for ride in rides %}
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
+                <div class="row justify-content-center mt-4">
+                    <div class="col-12 col-md-12 col-lg-10">
+                        <div class="row">
+                            {% for ride in rides %}
+                            <div class="col-12 col-md-6 mb-4">
+                                <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
                                 <p class="card-text">
@@ -36,6 +38,8 @@
                         </div>
                     </div>
                     {% endfor %}
+                        </div>
+                    </div>
                 </div>
             {% else %}
                 <div class="alert alert-info" role="alert">

@@ -61,12 +61,14 @@
             class="navbar navbar-expand-sm fixed-top navbar-dark"
         >
             <div class="container">
-                <a class="navbar-brand" href="{{ home_url }}"
-                    ><img
+                <a class="navbar-brand d-flex align-items-center" href="{{ home_url }}">
+                    <img
                         src="{% static 'images/scoot_logo_bg_tp_white_small.png' %}"
                         alt="Scoot Logo"
                         class="logo"
-                /></a>
+                    />
+                    <span class="ms-3 text-white">Scoot</span>
+                </a>
                 <button
                     class="navbar-toggler"
                     type="button"
