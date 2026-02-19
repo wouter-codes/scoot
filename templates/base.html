@@ -108,9 +108,6 @@
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
                             </ul>
                         </li>
-                        <p class="text-end mx-3 my-auto text-white">
-                            You are logged in as {{ user }}
-                        </p>
                         {% else %}
                         <li class="nav-item">
                             <a
@@ -126,9 +123,6 @@
                                 >Log In</a
                             >
                         </li>
-                        <p class="text-end mx-3 my-auto text-white">
-                            You are not logged in
-                        </p>
                         {% endif %}
                     </ul>
                 </div>

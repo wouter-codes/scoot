@@ -133,9 +133,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'     # Disable email verification
-ACCOUNT_EMAIL_REQUIRED = False       # Don't require email at signup
-ACCOUNT_USERNAME_REQUIRED = True     # Keep username as the login method
-ACCOUNT_AUTHENTICATION_METHOD = "username"  # Authenticate by username only
+ACCOUNT_LOGIN_METHODS = {'username'}    # Use username (not email) as login identifier - password still required
+ACCOUNT_SIGNUP_FIELDS = ['username*', 'password1*', 'password2*']  # Username and passwords required, email optional
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
