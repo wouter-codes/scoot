@@ -18,6 +18,10 @@ def index(request):
         status='1'  # Only published rides
     ).order_by('date')
     
+    # Exclude rides created by the logged-in user
+    if request.user.is_authenticated:
+        rides = rides.exclude(driver=request.user)
+    
     # Apply filters if form is valid
     if form.is_valid():
         origin = form.cleaned_data.get('origin')
@@ -34,9 +38,20 @@ def index(request):
         if min_passengers:
             rides = rides.filter(seats_available__gte=min_passengers)
     
+    # Add user's existing requests to each ride for template logic
+    if request.user.is_authenticated:
+        user_requests = RideRequest.objects.filter(
+            passenger=request.user,
+            ride__in=rides
+        ).values_list('ride_id', flat=True)
+        user_request_ids = set(user_requests)
+    else:
+        user_request_ids = set()
+    
     context = {
         'form': form,
-        'rides': rides
+        'rides': rides,
+        'user_request_ids': user_request_ids
     }
     return render(request, 'rides/index.html', context)
 

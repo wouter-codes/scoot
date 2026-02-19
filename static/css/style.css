@@ -61,32 +61,15 @@ select:focus {
     width: 50px;
 }
 
-/* Nav link hover effect on small screens */
-@media (max-width: 575.98px) {
-    #navbar .nav-link:hover {
-        font-weight: bold;
-        color: var(--fourth-color);
-    }
-}
-
-/* Button border radius */
-.btn {
-    border-radius: 20px;
-}
-
-/* Style buttons in main content with tertiary color */
-.btn-primary,
-main .btn:not(.btn-outline-light):not(.btn-outline-dark) {
-    background-color: var(--background-color-tertiary);
-    border-color: var(--background-color-tertiary);
+/* Prevent active state styling on Find Your Ride button */
+#find-ride-btn {
+    background-color: transparent;
     color: var(--third-color);
 }
 
-.btn-primary:hover,
-main .btn:not(.btn-outline-light):not(.btn-outline-dark):hover {
-    background-color: var(--background-color-quaternary);
-    border-color: var(--background-color-quaternary);
-    color: var(--third-color);
+#find-ride-btn:hover {
+    background-color: var(--third-color);
+    color: var(--background-color-secondary);
 }
 
 #logo-title {
@@ -95,18 +78,40 @@ main .btn:not(.btn-outline-light):not(.btn-outline-dark):hover {
     line-height: 0;
 }
 
-.socials i {
+/* Button border radius */
+.btn {
+    border-radius: 20px;
+}
+
+/* Style primary buttons with tertiary color */
+.btn-primary {
+    background-color: var(--background-color-tertiary);
+    border-color: var(--background-color-tertiary);
     color: var(--third-color);
 }
 
-.socials i:hover {
-    color: var(--fifth-color);
+.btn-primary:hover {
+    background-color: var(--background-color-quaternary);
+    border-color: var(--background-color-quaternary);
+    color: var(--third-color);
+}
+
+.available-rides .btn-warning {
+    opacity: 0.5;
 }
 
 /* FOOTER */
 .footer {
     background-color: var(--background-color-tertiary);
     color: var(--fourth-color);
+}
+
+.socials i {
+    color: var(--third-color);
+}
+
+.socials i:hover {
+    color: var(--fifth-color);
 }
 
 /* LOGIN */
@@ -131,4 +136,12 @@ input[name="email"] {
 .custom-btn:hover {
     background-color: var(--background-color-quaternary);
     color: var(--third-color);
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 575.98px) {
+    #navbar .nav-link:hover {
+        font-weight: bold;
+        color: var(--fourth-color);
+    }
 }

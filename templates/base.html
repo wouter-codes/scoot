@@ -83,18 +83,11 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto gap-3 gap-lg-0">
                         {% if user.is_authenticated %}
+                        <!-- Find your ride button -->
                         <li class="nav-item">
-                            <a class="nav-link d-sm-none {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
-                            href="{{ my_rides_url }}">My Rides</a>
-                            <a class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" 
-                            href="{{ my_rides_url }}">My Rides</a>
+                            <a href="{{ home_url }}" class="btn btn-outline-light d-sm-none mt-3"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Your Ride</a>
+                            <a href="{{ home_url }}" class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block" id="find-ride-btn"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Your Ride</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-sm-none {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
-                            href="{{ my_ride_requests_url }}">My Ride Requests</a>
-                            <a class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" 
-                            href="{{ my_ride_requests_url }}">My Ride Requests</a>
-                        </li>                       
                         <!-- Profile dropdown - visible when navbar is expanded (sm and up) -->
                         <li class="nav-item dropdown d-none d-sm-block">
                             <button
@@ -108,14 +101,24 @@
                                 <i class="fas fa-user"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ my_rides_url }}">My Rides</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ my_ride_requests_url }}">My Ride Requests</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">My Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
                             </ul>
                         </li>
-                        <!-- Profile and Logout links - visible when hamburger menu is active (below sm) -->
+                        <!-- Mobile menu links - visible when hamburger menu is active (below sm) -->
                         <li class="nav-item d-sm-none">
-                            <a class="nav-link" href="#">Profile</a>
+                            <a class="nav-link {% if request.path == my_rides_url %}active" aria-current="page {% endif %}" href="{{ my_rides_url }}">My Rides</a>
+                        </li>
+                        <li class="nav-item d-sm-none">
+                            <a class="nav-link {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" href="{{ my_ride_requests_url }}">My Ride Requests</a>
+                        </li>
+                        <li class="nav-item d-sm-none">
+                            <a class="nav-link" href="#">My Profile</a>
                         </li>
                         <li class="nav-item d-sm-none">
                             <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
