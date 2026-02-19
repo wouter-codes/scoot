@@ -74,6 +74,21 @@ select:focus {
     border-radius: 20px;
 }
 
+/* Style buttons in main content with tertiary color */
+.btn-primary,
+main .btn:not(.btn-outline-light):not(.btn-outline-dark) {
+    background-color: var(--background-color-tertiary);
+    border-color: var(--background-color-tertiary);
+    color: var(--third-color);
+}
+
+.btn-primary:hover,
+main .btn:not(.btn-outline-light):not(.btn-outline-dark):hover {
+    background-color: var(--background-color-quaternary);
+    border-color: var(--background-color-quaternary);
+    color: var(--third-color);
+}
+
 #logo-title {
     font-family: var(--tertiary-font);
     font-size: 3rem;

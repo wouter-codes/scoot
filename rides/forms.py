@@ -36,7 +36,7 @@ class RideSearchForm(forms.ModelForm):
             Column('destination', css_class='col-12 col-lg-3'),
             Column('date', css_class='col-12 col-lg-2'),
             Column('min_passengers', css_class='col-12 col-lg-2'),
-            Column(Submit('submit', 'Search', css_class='btn-signup w-100'), css_class='col-12 col-lg-2'),
+            Column(Submit('submit', 'Search', css_class='btn-primary w-100'), css_class='col-12 col-lg-2'),
         )
     
     class Meta:
