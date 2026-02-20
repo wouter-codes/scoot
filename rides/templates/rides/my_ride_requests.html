@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-12">
             <h5 class="mb-3">
-                <a href="{% url 'index' %}" class="text-decoration-none">
+                <a href="{% url 'search_rides' %}" class="text-decoration-none">
                     &larr; Back to all available rides
                 </a>
             </h5>
@@ -42,7 +42,7 @@
             {% else %}
                 <div class="alert alert-info" role="alert">
                     <h4 class="alert-heading">No Ride Requests Yet</h4>
-                    <p>You haven't requested any rides yet. <a href="{% url 'index' %}" class="link">Browse available rides</a> to get started!</p>
+                    <p>You haven't requested any rides yet. <a href="{% url 'search_rides' %}" class="link">Browse available rides</a> to get started!</p>
                 </div>
             {% endif %}
         </div>

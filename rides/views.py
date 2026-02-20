@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views import generic
-from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -9,34 +7,26 @@ from django.urls import reverse
 from .models import Rides, RideRequest, UserProfile
 from .forms import RideSearchForm
 
-def index(request):
+def search_rides(request):
     """Render the home page with ride search form"""
     form = RideSearchForm(request.GET or None)
+    
+    # Start with all published, available rides
     rides = Rides.objects.filter(
         date__gt=timezone.now(),
         seats_available__gt=0,
         status='1'  # Only published rides
-    ).order_by('date')
+    )
+    
+    # Apply search filters from form (must be called on manager)
+    rides = rides.apply_search_filters(form)
     
     # Exclude rides created by the logged-in user
     if request.user.is_authenticated:
         rides = rides.exclude(driver=request.user)
     
-    # Apply filters if form is valid
-    if form.is_valid():
-        origin = form.cleaned_data.get('origin')
-        destination = form.cleaned_data.get('destination')
-        date = form.cleaned_data.get('date')
-        min_passengers = form.cleaned_data.get('min_passengers')
-        
-        if origin:
-            rides = rides.filter(origin__icontains=origin)
-        if destination:
-            rides = rides.filter(destination__icontains=destination)
-        if date:
-            rides = rides.filter(date__date=date)
-        if min_passengers:
-            rides = rides.filter(seats_available__gte=min_passengers)
+    # Order by date
+    rides = rides.order_by('date')
     
     # Add user's existing requests to each ride for template logic
     if request.user.is_authenticated:
@@ -53,7 +43,7 @@ def index(request):
         'rides': rides,
         'user_request_ids': user_request_ids
     }
-    return render(request, 'rides/index.html', context)
+    return render(request, 'rides/search_rides.html', context)
 
 
 def book_ride(request, ride_id):
@@ -72,7 +62,7 @@ def book_ride(request, ride_id):
     # Check if ride has available seats
     if ride.seats_available <= 0:
         messages.error(request, 'This ride has no available seats.')
-        return redirect('index')
+        return redirect('search_rides')
     
     if request.method == 'POST':
         seats_requested = int(request.POST.get('seats_requested', 1))

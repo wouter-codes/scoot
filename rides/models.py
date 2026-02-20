@@ -25,6 +25,27 @@ def validate_future_date(value):
     if value < timezone.now():
         raise ValidationError('Ride date must be in the future.')
 
+class RidesQuerySet(models.QuerySet):
+    """Custom QuerySet for Rides."""
+    
+    def apply_search_filters(self, form):
+        """Apply search filters from form to queryset."""
+        if not form.is_valid():
+            return self
+        
+        queryset = self
+        
+        if form.cleaned_data.get('origin'):
+            queryset = queryset.filter(origin__icontains=form.cleaned_data['origin'])
+        if form.cleaned_data.get('destination'):
+            queryset = queryset.filter(destination__icontains=form.cleaned_data['destination'])
+        if form.cleaned_data.get('date'):
+            queryset = queryset.filter(date__date=form.cleaned_data['date'])
+        if form.cleaned_data.get('min_passengers'):
+            queryset = queryset.filter(seats_available__gte=form.cleaned_data['min_passengers'])
+        
+        return queryset
+
 # Create your models here.
 class Rides(models.Model):
     """
@@ -39,6 +60,8 @@ class Rides(models.Model):
     status = models.CharField(max_length=1, choices=RIDES_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    
+    objects = RidesQuerySet.as_manager()
     
     def clean(self):
         """Model-level validation."""
