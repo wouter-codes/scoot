@@ -46,14 +46,14 @@ def search_rides(request):
     return render(request, 'rides/search_rides.html', context)
 
 
-def book_ride(request, ride_id):
+def request_ride(request, ride_id):
     """
-    Handle ride booking. Users select number of seats and confirm.
+    Handle ride request. Users select number of seats and confirm.
     Redirects to signup if not logged in.
     """
     if not request.user.is_authenticated:
         login_url = reverse('account_login')
-        message = f'You need to be logged in to book a ride. Sign up or <a href="{login_url}" class="link">log in</a> to continue.'
+        message = f'You need to be logged in to request a ride. Sign up or <a href="{login_url}" class="link">log in</a> to continue.'
         messages.warning(request, mark_safe(message))
         return redirect('account_signup')
     
@@ -73,7 +73,7 @@ def book_ride(request, ride_id):
                 'ride': ride,
                 'error': f'Please select between 1 and {ride.seats_available} seats'
             }
-            return render(request, 'rides/book_ride.html', context)
+            return render(request, 'rides/request_ride.html', context)
         
         # Create the ride request
         ride_request = RideRequest.objects.create(
@@ -93,7 +93,7 @@ def book_ride(request, ride_id):
     context = {
         'ride': ride,
     }
-    return render(request, 'rides/book_ride.html', context)
+    return render(request, 'rides/request_ride.html', context)
 
 
 @login_required(login_url='account_signup')
