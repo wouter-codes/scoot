@@ -45,3 +45,31 @@ class RideSearchForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'})
         }
+
+
+class RideCreateForm(forms.ModelForm):
+    """Form for creating a new ride listing."""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Set placeholders
+        self.fields['origin'].widget.attrs['placeholder'] = 'e.g. Truro'
+        self.fields['destination'].widget.attrs['placeholder'] = 'e.g. Falmouth'
+        self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
+        
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Create Ride', css_class='btn-primary'))
+    
+    class Meta:
+        model = Rides
+        fields = ['origin', 'destination', 'date', 'seats_available', 'pickup_notes']
+        widgets = {
+            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'pickup_notes': forms.Textarea(attrs={'rows': 3}),
+        }
+        labels = {
+            'seats_available': 'Available Seats',
+            'pickup_notes': 'Pickup Notes',
+        }

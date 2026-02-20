@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.html import mark_safe
 from django.urls import reverse
 from .models import Rides, RideRequest, UserProfile
-from .forms import RideSearchForm
+from .forms import RideSearchForm, RideCreateForm
 
 def search_rides(request):
     """Render the home page with ride search form"""
@@ -107,6 +107,33 @@ def ride_request_confirmation(request, request_id):
         'ride_request': ride_request,
     }
     return render(request, 'rides/ride_request_confirmation.html', context)
+
+
+@login_required(login_url='account_signup')
+def create_ride(request):
+    """Allow logged-in users to create a new ride listing."""
+    if request.method == 'POST':
+        form = RideCreateForm(request.POST)
+        if form.is_valid():
+            ride = form.save(commit=False)
+            ride.driver = request.user
+            ride.status = '1'  # Published
+            ride.save()
+            messages.success(request, 'Your ride has been created successfully!')
+            return redirect('my_rides')
+    else:
+        form = RideCreateForm()
+    
+    return render(request, 'rides/create_ride.html', {'form': form})
+
+
+@login_required(login_url='account_signup')
+def my_rides(request):
+    """Display all rides created by the logged-in user."""
+    rides = Rides.objects.filter(driver=request.user).order_by('-date')
+    
+    return render(request, 'rides/my_rides.html', {'rides': rides})
+
 
 @login_required(login_url='account_signup')
 def my_ride_requests(request):
