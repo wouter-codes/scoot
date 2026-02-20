@@ -35,12 +35,12 @@
                             <div class="card-footer">
                                 {% if user.is_authenticated %}
                                     {% if ride.id in user_request_ids %}
-                                        <button class="btn btn-warning" disabled style="width: 25%;">Requested</button>
+                                        <button class="btn btn-warning ride-btn" disabled>Requested</button>
                                     {% else %}
-                                        <a href="{% url 'book_ride' ride.id %}" class="btn btn-primary" style="width: 25%;">Hop On</a>
+                                        <a href="{% url 'book_ride' ride.id %}" class="btn btn-primary ride-btn">Hop On</a>
                                     {% endif %}
                                 {% else %}
-                                    <a href="{% url 'book_ride' ride.id %}" class="btn btn-primary" style="width: 25%;">Hop On</a>
+                                    <a href="{% url 'book_ride' ride.id %}" class="btn btn-primary ride-btn">Hop On</a>
                                 {% endif %}
                             </div>
                         </div>

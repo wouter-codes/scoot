@@ -100,6 +100,11 @@ select:focus {
     opacity: 0.5;
 }
 
+/* Ride card buttons - min width on larger screens */
+.ride-btn {
+    min-width: 25%;
+}
+
 /* Back link styling */
 .text-decoration-none {
     color: var(--background-color-tertiary);
