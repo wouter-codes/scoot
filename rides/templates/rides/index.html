@@ -32,7 +32,7 @@
                                 <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
                                 {% endif %}
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-flex justify-content-center">
                                 {% if user.is_authenticated %}
                                     {% if ride.id in user_request_ids %}
                                         <button class="btn btn-warning ride-btn" disabled>Requested</button>

@@ -102,7 +102,7 @@ select:focus {
 
 /* Ride card buttons - min width on larger screens */
 .ride-btn {
-    min-width: 25%;
+    min-width: 33%;
 }
 
 /* Back link styling */
@@ -153,9 +153,16 @@ input[name="email"] {
 }
 
 /* MEDIA QUERIES */
-@media (max-width: 575.98px) {
+@media (max-width: 576px) {
     #navbar .nav-link:hover {
         font-weight: bold;
         color: var(--fourth-color);
     }
+    /* Ride card buttons - min width */
+    .ride-btn {
+        min-width: 33%;
+    }
+}
+
+@media (min-width: 576px) {
 }
