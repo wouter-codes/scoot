@@ -126,6 +126,16 @@ def create_ride(request):
     
     return render(request, 'rides/create_ride.html', {'form': form})
 
+@login_required(login_url='account_signup')
+def delete_ride(request, ride_id):
+    """Allow ride creator to delete their ride listing."""
+    ride = get_object_or_404(Rides, id=ride_id)
+    if ride.driver == request.user:
+        ride.delete()
+        messages.add_message(request, messages.SUCCESS, 'Ride deleted successfully!')
+    else:
+        messages.add_message(request, messages.ERROR, 'You can only delete your own rides!')
+    return redirect('my_rides')
 
 @login_required(login_url='account_signup')
 def my_rides(request):

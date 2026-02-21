@@ -28,8 +28,23 @@
                                 <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
                                 {% endif %}
                             </div>
-                            <div class="card-footer">
-                                <!-- Edit and Delete buttons will be added in Stories #8 and #9 -->
+                            <div class="card-footer d-flex justify-content-end gap-2">
+                                <!-- Edit button -->
+
+                                <!-- Delete button -->
+                                 {% comment %} <form action="{% url 'delete_ride' ride.id %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this ride?');">
+                                            Delete
+                                        </button>
+                                </form> {% endcomment %}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-delete-url="{% url 'delete_ride' ride.id %}">
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     </div>

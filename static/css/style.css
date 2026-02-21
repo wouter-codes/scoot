@@ -105,6 +105,12 @@ select:focus {
     min-width: 33%;
 }
 
+/* MY RIDES */
+/* Delete buttons styling */
+.btn-danger {
+    background-color: #c24949;
+}
+
 /* Back link styling */
 .text-decoration-none {
     color: var(--background-color-tertiary);
