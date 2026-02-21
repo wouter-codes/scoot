@@ -45,6 +45,10 @@ def search_rides(request):
     }
     return render(request, 'rides/search_rides.html', context)
 
+def ride_detail(request, ride_id):
+    """Display full details for a single ride."""
+    ride = get_object_or_404(Rides, id=ride_id)
+    return render(request, 'rides/ride_detail.html', {'ride': ride})
 
 def request_ride(request, ride_id):
     """

@@ -29,15 +29,8 @@
                                 {% endif %}
                             </div>
                             <div class="card-footer d-flex justify-content-end gap-2">
-                                <!-- Edit button -->
-                                <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
-                                <!-- Delete button -->
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal"
-                                    data-delete-url="{% url 'delete_ride' ride.id %}">
-                                    Delete
-                                </button>
+                                <!-- View button -->
+                                <a href="{% url 'ride_detail' ride.id %}" class="btn btn-primary btn-sm">View</a>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <h5 class="mb-3">
+                <a href="{% url 'my_rides' %}" class="text-decoration-none">
+                    &larr; Back to my rides
+                </a>
+            </h5>
+            <h1 class="mb-4">Ride Details</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                    <p class="card-text">
+                        <strong>Date & Time:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                        <strong>Available Seats:</strong> {{ ride.seats_available }}<br>
+                        <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}<br>
+                        {% if ride.pickup_notes %}
+                        <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
+                        {% endif %}
+                        <strong>Status:</strong> 
+                        <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                            {{ ride.get_status_display }}
+                        </span>
+                    </p>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <!-- Edit button -->
+                    <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <!-- Delete button -->
+                    <button type="button" class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        data-delete-url="{% url 'delete_ride' ride.id %}">
+                        Delete
+                    </button>
+                </div>
+            </div>
+            <a href="{% url 'search_rides' %}" class="btn btn-outline-secondary">Back to Rides</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
