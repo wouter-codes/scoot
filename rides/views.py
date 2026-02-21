@@ -127,6 +127,21 @@ def create_ride(request):
     return render(request, 'rides/create_ride.html', {'form': form})
 
 @login_required(login_url='account_signup')
+def edit_ride(request, ride_id):
+    """Allow ride creator to edit their ride listing."""
+    ride = get_object_or_404(Rides, id=ride_id)
+    if ride.driver == request.user:
+        form = RideCreateForm(request.POST or None, instance=ride)
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Ride updated successfully!')
+            return redirect('my_rides')
+        return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
+    else:
+        messages.add_message(request, messages.ERROR, 'You can only edit your own rides!')
+        return redirect('my_rides')
+    
+@login_required(login_url='account_signup')
 def delete_ride(request, ride_id):
     """Allow ride creator to delete their ride listing."""
     ride = get_object_or_404(Rides, id=ride_id)

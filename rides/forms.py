@@ -76,7 +76,11 @@ class RideCreateForm(forms.ModelForm):
         self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Create Ride', css_class='btn-primary'))
+        # Change button text if editing
+        if self.instance and self.instance.pk:
+            self.helper.add_input(Submit('submit', 'Update Ride', css_class='btn-primary'))
+        else:
+            self.helper.add_input(Submit('submit', 'Create Ride', css_class='btn-primary'))
     
     class Meta:
         model = Rides
