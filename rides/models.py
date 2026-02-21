@@ -5,12 +5,12 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from cloudinary.models import CloudinaryField
 
-SEATS_AVAILABLE = ((0, '0 seats'),
-                   (1, '1 seat'), 
-                   (2, '2 seats'), 
-                   (3, '3 seats'), 
-                   (4, '4 seats'), 
-                   (5, '5 seats'),)
+SEATS_AVAILABLE = (
+    (1, '1 seat'),
+    (2, '2 seats'),
+    (3, '3 seats'),
+    (4, '4 seats'),
+)
 
 RIDES_STATUS = (('0', 'Draft'), ('1', 'Published'), ('2', 'Cancelled'))
                 
@@ -52,8 +52,8 @@ class Rides(models.Model):
     Stores a ride entry related to :model:'auth.User'.
     """
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rides')
-    origin = models.CharField(max_length=255)
-    destination = models.CharField(max_length=255)
+    origin = models.CharField(max_length=100)
+    destination = models.CharField(max_length=100)
     date = models.DateTimeField(validators=[validate_future_date])
     seats_available = models.IntegerField(choices=SEATS_AVAILABLE, default=1)
     pickup_notes = models.TextField()
@@ -67,7 +67,7 @@ class Rides(models.Model):
         """Model-level validation."""
         super().clean()
         if self.origin and self.destination and self.origin.lower() == self.destination.lower():
-            raise ValidationError('Origin and destination must be different.')
+            raise ValidationError('Origin (pick up) and destination (drop off) must be different.')
         
     class Meta:
         ordering = ['-created_on']
@@ -83,7 +83,7 @@ class RideRequest(models.Model):
     """
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride_requests_as_passenger')
     ride = models.ForeignKey(Rides, on_delete=models.CASCADE, related_name='ride_requests')
-    seats_requested = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    seats_requested = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(4)])
     status = models.CharField(max_length=1, choices=REQUEST_STATUS, default='0')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

@@ -49,15 +49,31 @@ class RideSearchForm(forms.ModelForm):
 
 class RideCreateForm(forms.ModelForm):
     """Form for creating a new ride listing."""
+    def clean_origin(self):
+        origin = self.cleaned_data.get('origin', '')
+        if len(origin.strip()) < 3:
+            raise forms.ValidationError('Origin must be at least 3 characters.')
+        return origin
+
+    def clean_destination(self):
+        destination = self.cleaned_data.get('destination', '')
+        if len(destination.strip()) < 3:
+            raise forms.ValidationError('Destination must be at least 3 characters.')
+        return destination    
     
+    seats_available = forms.IntegerField(
+        min_value=1,
+        max_value=4,
+        error_messages={'min_value': 'You must offer at least 1 seat.'},
+        label='Available Seats'
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
         # Set placeholders
         self.fields['origin'].widget.attrs['placeholder'] = 'e.g. Truro'
         self.fields['destination'].widget.attrs['placeholder'] = 'e.g. Falmouth'
         self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
-        
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Create Ride', css_class='btn-primary'))
@@ -70,6 +86,8 @@ class RideCreateForm(forms.ModelForm):
             'pickup_notes': forms.Textarea(attrs={'rows': 3}),
         }
         labels = {
+            'origin': 'Pick Up',
+            'destination': 'Drop Off',
             'seats_available': 'Available Seats',
             'pickup_notes': 'Pickup Notes',
         }

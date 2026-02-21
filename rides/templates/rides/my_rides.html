@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Rides</h1>
+                <a href="{% url 'create_ride' %}" class="btn btn-primary">+ Offer a Ride</a>
+            </div>
+            
+            {% if rides %}
+                <div class="row">
+                    {% for ride in rides %}
+                    <div class="col-12 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                                <p class="card-text">
+                                    <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                                    <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
+                                    <strong>Status:</strong> 
+                                    <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                        {{ ride.get_status_display }}
+                                    </span>
+                                </p>
+                                {% if ride.pickup_notes %}
+                                <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <!-- Edit and Delete buttons will be added in Stories #8 and #9 -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading">No rides yet</h4>
+                    <p>You haven't offered any rides yet. <a href="{% url 'create_ride' %}" class="alert-link">Create your first ride</a> to get started!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
