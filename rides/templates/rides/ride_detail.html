@@ -26,8 +26,8 @@
                         {% if ride.pickup_notes %}
                         <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
                         {% endif %}
-                        <strong>Status:</strong>
                         {% if ride_request %}
+                            <strong>Status:</strong>
                             {% if ride_request.status == '0' %}
                                 <span class="badge bg-warning">Pending</span>
                             {% elif ride_request.status == '1' %}
@@ -40,9 +40,10 @@
                                 <span class="badge bg-info">Completed</span>
                             {% endif %}
                         {% elif user.is_authenticated and ride.driver == user %}
-                            <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                            <strong>Status:</strong><span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
                                 {{ ride.get_status_display }}
                             </span>
+                        {% else %}
                         {% endif %}
                     </p>
                 </div>
@@ -64,10 +65,14 @@
                         <!--     <button type="submit" name="save_as_draft" class="btn btn-secondary btn-sm">Save as Draft</button> -->
                         <!--     <button type="submit" name="publish" class="btn btn-success btn-sm">Publish</button> -->
                         <!-- </form> -->
+                    {% elif ride_request %}
+                        {% if ride_request.status == '0' or ride_request.status == '1' and ride_request.id %}
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                        {% endif %}
                     {% else %}
-                        <!-- Show request-related actions or status for non-drivers -->
-                        <!-- Example: -->
-                        <!-- <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary btn-sm">Request Ride</a> -->
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn">Hop On</a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

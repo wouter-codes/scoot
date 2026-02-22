@@ -11,4 +11,5 @@ urlpatterns = [
     path('booking/<int:request_id>/confirmation/', views.ride_request_confirmation, name='ride_request_confirmation'),
     path('my-rides/', views.my_rides, name='my_rides'),
     path('my-ride-requests/', views.my_ride_requests, name='my_ride_requests'),
+    path('ride-request/<int:request_id>/cancel/', views.cancel_ride_request, name='cancel_ride_request'),
 ]

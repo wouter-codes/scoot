@@ -17,9 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // JavaScript to handle the delete confirmation modal
+
 document.addEventListener("DOMContentLoaded", function () {
     handleDeleteModal();
+    handleCancelModal();
 });
+function handleCancelModal() {
+    const cancelModal = document.getElementById("cancelModal");
+    if (!cancelModal) return;
+    cancelModal.addEventListener("show.bs.modal", function (event) {
+        const button = event.relatedTarget;
+        const cancelUrl = button.getAttribute("data-cancel-url");
+        const form = document.getElementById("cancelRideForm");
+        if (form && cancelUrl) {
+            form.action = cancelUrl;
+        }
+    });
+}
 
 function handleDeleteModal() {
     const deleteModal = document.getElementById("deleteModal");

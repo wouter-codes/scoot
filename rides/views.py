@@ -45,6 +45,13 @@ def search_rides(request):
     }
     return render(request, 'rides/search_rides.html', context)
 
+@login_required(login_url='account_signup')
+def my_rides(request):
+    """Display all rides created by the logged-in user."""
+    rides = Rides.objects.filter(driver=request.user).order_by('-date')
+    
+    return render(request, 'rides/my_rides.html', {'rides': rides})
+
 def ride_detail(request, ride_id):
     """Display full details for a single ride."""
     ride = get_object_or_404(Rides, id=ride_id)
@@ -102,7 +109,6 @@ def request_ride(request, ride_id):
     }
     return render(request, 'rides/request_ride.html', context)
 
-
 @login_required(login_url='account_signup')
 def ride_request_confirmation(request, request_id):
     """
@@ -114,7 +120,6 @@ def ride_request_confirmation(request, request_id):
         'ride_request': ride_request,
     }
     return render(request, 'rides/ride_request_confirmation.html', context)
-
 
 @login_required(login_url='account_signup')
 def create_ride(request):
@@ -173,14 +178,6 @@ def delete_ride(request, ride_id):
     return redirect('my_rides')
 
 @login_required(login_url='account_signup')
-def my_rides(request):
-    """Display all rides created by the logged-in user."""
-    rides = Rides.objects.filter(driver=request.user).order_by('-date')
-    
-    return render(request, 'rides/my_rides.html', {'rides': rides})
-
-
-@login_required(login_url='account_signup')
 def my_ride_requests(request):
     """
     Display all ride requests (bookings) for the logged-in user.
@@ -193,6 +190,26 @@ def my_ride_requests(request):
         'ride_requests': ride_requests,
     }
     return render(request, 'rides/my_ride_requests.html', context)
+
+@login_required(login_url='account_signup')
+def cancel_ride_request(request, request_id):
+    """
+    Allow passenger to cancel their ride request, restore seats, and show confirmation.
+    """
+    ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
+    ride = ride_request.ride
+    if request.method == 'POST':
+        # Only allow cancel if pending or approved
+        if ride_request.status in ['0', '1']:
+            # Restore seats if previously approved
+            ride.seats_available += ride_request.seats_requested
+            ride.save()
+            ride_request.delete()
+            messages.success(request, 'Your ride request was cancelled and the seat(s) restored.')
+        else:
+            messages.error(request, 'You cannot cancel a declined or already cancelled request.')
+        return redirect('my_ride_requests')
+    return redirect('my_ride_requests')
 
 # Create your views here.
 # class PostList(generic.ListView):

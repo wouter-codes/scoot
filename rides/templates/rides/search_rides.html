@@ -29,9 +29,6 @@
                                                 <strong>Seats:</strong> {{ ride.seats_available }}<br>
                                                 <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}
                                             </p>
-                                            {% if ride.pickup_notes %}
-                                            <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
-                                            {% endif %}
                                         </div>
                                     </a>
                                     <div class="card-footer d-flex justify-content-center">
