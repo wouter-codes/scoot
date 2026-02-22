@@ -48,7 +48,10 @@ def search_rides(request):
 def ride_detail(request, ride_id):
     """Display full details for a single ride."""
     ride = get_object_or_404(Rides, id=ride_id)
-    return render(request, 'rides/ride_detail.html', {'ride': ride})
+    ride_request = None
+    if request.user.is_authenticated:
+        ride_request = RideRequest.objects.filter(ride=ride, passenger=request.user).first()
+    return render(request, 'rides/ride_detail.html', {'ride': ride, 'ride_request': ride_request})
 
 def request_ride(request, ride_id):
     """

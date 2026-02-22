@@ -11,7 +11,11 @@
                     <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
                 {% endif %}
             </h5>
-            <h1 class="mb-4">Ride Details</h1>
+            {% if ride_request %}
+            <h1 class="mb-4">Ride Request Details</h1>
+            {% elif user.is_authenticated and ride.driver == user %}
+            <h1 class="mb-4">My Ride Details</h1>
+            {% endif %}
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
@@ -22,10 +26,24 @@
                         {% if ride.pickup_notes %}
                         <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
                         {% endif %}
-                        <strong>Status:</strong> 
-                        <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
-                            {{ ride.get_status_display }}
-                        </span>
+                        <strong>Status:</strong>
+                        {% if ride_request %}
+                            {% if ride_request.status == '0' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif ride_request.status == '1' %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif ride_request.status == '2' %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% elif ride_request.status == '3' %}
+                                <span class="badge bg-secondary">Cancelled</span>
+                            {% elif ride_request.status == '4' %}
+                                <span class="badge bg-info">Completed</span>
+                            {% endif %}
+                        {% elif user.is_authenticated and ride.driver == user %}
+                            <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                {{ ride.get_status_display }}
+                            </span>
+                        {% endif %}
                     </p>
                 </div>
                 <div class="card-footer d-flex justify-content-end gap-2">
