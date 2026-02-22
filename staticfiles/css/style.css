@@ -61,6 +61,16 @@ select:focus {
     width: 50px;
 }
 
+/* CARD BODIES GLOBAL */
+.card-footer {
+    margin-top: auto;
+}
+
+.card-hover {
+    transition: border-color 0.3s ease;
+    border: 1px solid var(--background-color-quaternary);
+}
+
 /* Prevent active state styling on Find Your Ride button */
 #find-ride-btn {
     background-color: transparent;
@@ -103,6 +113,12 @@ select:focus {
 /* Ride card buttons - min width on larger screens */
 .ride-btn {
     min-width: 33%;
+}
+
+/* MY RIDES */
+/* Delete buttons styling */
+.btn-danger {
+    background-color: #c24949;
 }
 
 /* Back link styling */
