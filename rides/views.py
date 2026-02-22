@@ -10,24 +10,24 @@ from .forms import RideSearchForm, RideCreateForm
 def search_rides(request):
     """Render the home page with ride search form"""
     form = RideSearchForm(request.GET or None)
-    
+
     # Start with all published, available rides
     rides = Rides.objects.filter(
         date__gt=timezone.now(),
         seats_available__gt=0,
         status='1'  # Only published rides
     )
-    
+
     # Apply search filters from form (must be called on manager)
     rides = rides.apply_search_filters(form)
-    
+
     # Exclude rides created by the logged-in user
     if request.user.is_authenticated:
         rides = rides.exclude(driver=request.user)
-    
+
     # Order by date
     rides = rides.order_by('date')
-    
+
     # Add user's existing requests to each ride for template logic
     if request.user.is_authenticated:
         user_requests = RideRequest.objects.filter(
@@ -37,7 +37,7 @@ def search_rides(request):
         user_request_ids = set(user_requests)
     else:
         user_request_ids = set()
-    
+
     context = {
         'form': form,
         'rides': rides,

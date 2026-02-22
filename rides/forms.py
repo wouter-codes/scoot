@@ -1,7 +1,7 @@
 from django import forms
 from .models import Rides
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Row, Column
+from crispy_forms.layout import Submit, Row, Column, Layout
 
 class RideSearchForm(forms.ModelForm):
     """Form for searching rides by origin, destination, date, and min passengers."""
@@ -31,12 +31,14 @@ class RideSearchForm(forms.ModelForm):
         
         self.helper = FormHelper()
         self.helper.form_method = 'get'
-        self.helper.layout = Row(
-            Column('origin', css_class='col-12 col-lg-3'),
-            Column('destination', css_class='col-12 col-lg-3'),
-            Column('date', css_class='col-12 col-lg-2'),
-            Column('min_passengers', css_class='col-12 col-lg-2'),
-            Column(Submit('submit', 'Search', css_class='btn-primary w-100'), css_class='col-12 col-lg-2'),
+        self.helper.layout = Layout(
+            Row(
+                Column('origin', css_class='col-12 col-lg-3'),
+                Column('destination', css_class='col-12 col-lg-3'),
+                Column('date', css_class='col-12 col-lg-2'),
+                Column('min_passengers', css_class='col-12 col-lg-2'),
+                Column(Submit('submit', 'Search', css_class='btn-primary w-100'), css_class='col-12 col-lg-2'),
+            )
         )
     
     class Meta:
@@ -76,9 +78,6 @@ class RideCreateForm(forms.ModelForm):
         self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # Add two submit buttons for create/edit (no if-else needed)
-        self.helper.add_input(Submit('save_draft', 'Save as Draft'))
-        self.helper.add_input(Submit('publish', 'Publish'))
     
     class Meta:
         model = Rides
