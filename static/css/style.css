@@ -61,6 +61,12 @@ select:focus {
     width: 50px;
 }
 
+/* CARD BODIES GLOBAL */
+.card-hover {
+    transition: border-color 0.3s ease;
+    border: 1px solid var(--background-color-quaternary);
+}
+
 /* Prevent active state styling on Find Your Ride button */
 #find-ride-btn {
     background-color: transparent;

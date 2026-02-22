@@ -121,9 +121,15 @@ def create_ride(request):
         if form.is_valid():
             ride = form.save(commit=False)
             ride.driver = request.user
-            ride.status = '1'  # Published
-            ride.save()
-            messages.success(request, 'Your ride has been created successfully!')
+            # Check which button was pressed
+            if 'publish' in request.POST:
+                ride.status = '1'  # Published
+                ride.save()
+                messages.success(request, 'Your ride has been published successfully!')
+            else:
+                ride.status = '0'  # Draft
+                ride.save()
+                messages.info(request, 'Your ride has been saved as a draft.')
             return redirect('my_rides')
     else:
         form = RideCreateForm()
@@ -137,8 +143,15 @@ def edit_ride(request, ride_id):
     if ride.driver == request.user:
         form = RideCreateForm(request.POST or None, instance=ride)
         if request.method == 'POST' and form.is_valid():
-            form.save()
-            messages.add_message(request, messages.SUCCESS, 'Ride updated successfully!')
+            ride = form.save(commit=False)
+            if 'publish' in request.POST:
+                ride.status = '1'  # Published
+                ride.save()
+                messages.success(request, 'Ride published successfully!')
+            else:
+                ride.status = '0'  # Draft
+                ride.save()
+                messages.info(request, 'Ride saved as draft.')
             return redirect('my_rides')
         return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
     else:

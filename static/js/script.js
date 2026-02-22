@@ -1,3 +1,21 @@
+// Add hover effect to clickable ride cards
+document.addEventListener("DOMContentLoaded", function () {
+    const cardLinks = document.querySelectorAll(".card-link-wrapper");
+    cardLinks.forEach(function (link) {
+        // Find the parent .card element
+        let card = link.closest(".card");
+        // If not found, try child .card (for my_rides)
+        if (!card) card = link.querySelector(".card");
+        if (!card) return;
+        link.addEventListener("mouseenter", function () {
+            card.classList.add("shadow-lg", "card-hover");
+        });
+        link.addEventListener("mouseleave", function () {
+            card.classList.remove("shadow-lg", "card-hover");
+        });
+    });
+});
+
 // JavaScript to handle the delete confirmation modal
 document.addEventListener("DOMContentLoaded", function () {
     handleDeleteModal();

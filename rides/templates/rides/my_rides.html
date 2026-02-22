@@ -13,26 +13,27 @@
                 <div class="row">
                     {% for ride in rides %}
                     <div class="col-12 col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
-                                <p class="card-text">
-                                    <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
-                                    <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
-                                    <strong>Status:</strong> 
-                                    <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
-                                        {{ ride.get_status_display }}
-                                    </span>
-                                </p>
-                                {% if ride.pickup_notes %}
-                                <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
-                                {% endif %}
+                        <a href="{% url 'ride_detail' ride.id %}" class="text-decoration-none card-link-wrapper">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                                    <p class="card-text">
+                                        <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                                        <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
+                                        <strong>Status:</strong> 
+                                        <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                            {{ ride.get_status_display }}
+                                        </span>
+                                    </p>
+                                    {% if ride.pickup_notes %}
+                                    <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer d-flex justify-content-end gap-2">
+                                    <!-- View button removed, card is clickable -->
+                                </div>
                             </div>
-                            <div class="card-footer d-flex justify-content-end gap-2">
-                                <!-- View button -->
-                                <a href="{% url 'ride_detail' ride.id %}" class="btn btn-primary btn-sm">View</a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
