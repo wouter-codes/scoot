@@ -76,13 +76,9 @@ class RideCreateForm(forms.ModelForm):
         self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # Add two submit buttons for create/edit
-        if self.instance and self.instance.pk:
-            self.helper.add_input(Submit('save_draft', 'Save as Draft', css_class='btn-secondary'))
-            self.helper.add_input(Submit('publish', 'Publish', css_class='btn-primary'))
-        else:
-            self.helper.add_input(Submit('save_draft', 'Save as Draft', css_class='btn-secondary'))
-            self.helper.add_input(Submit('publish', 'Publish', css_class='btn-primary'))
+        # Add two submit buttons for create/edit (no if-else needed)
+        self.helper.add_input(Submit('save_draft', 'Save as Draft'))
+        self.helper.add_input(Submit('publish', 'Publish'))
     
     class Meta:
         model = Rides

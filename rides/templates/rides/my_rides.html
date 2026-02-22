@@ -15,7 +15,7 @@
                     <div class="col-12 col-md-6 mb-4">
                         <a href="{% url 'ride_detail' ride.id %}" class="text-decoration-none card-link-wrapper">
                             <div class="card h-100">
-                                <div class="card-body">
+                                <div class="card-body text-dark">
                                     <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
                                     <p class="card-text">
                                         <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
@@ -30,7 +30,15 @@
                                     {% endif %}
                                 </div>
                                 <div class="card-footer d-flex justify-content-end gap-2">
-                                    <!-- View button removed, card is clickable -->
+                                    <!-- Edit button -->
+                                    <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                    <!-- Delete button -->
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ ride.id }}"
+                                        data-delete-url="{% url 'delete_ride' ride.id %}">
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         </a>

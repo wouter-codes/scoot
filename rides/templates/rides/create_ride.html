@@ -10,7 +10,15 @@
             
             <div class="card">
                 <div class="card-body">
-                    {% crispy form %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-3">
+                            <a href="{% url 'my_rides' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" name="save_draft" class="btn btn-secondary">Save as Draft</button>
+                            <button type="submit" name="publish" class="btn btn-success">Publish</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
