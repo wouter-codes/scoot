@@ -67,6 +67,7 @@
                         <!-- </form> -->
                     {% elif ride_request %}
                         {% if ride_request.status == '0' or ride_request.status == '1' and ride_request.id %}
+                            <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
                         {% endif %}
                     {% else %}

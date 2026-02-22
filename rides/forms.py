@@ -1,5 +1,5 @@
 from django import forms
-from .models import Rides
+from .models import Rides, RideRequest
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Row, Column, Layout
 
@@ -92,3 +92,22 @@ class RideCreateForm(forms.ModelForm):
             'seats_available': 'Available Seats',
             'pickup_notes': 'Pickup Notes',
         }
+
+class RideRequestEditForm(forms.ModelForm):
+    """Form for editing a ride request (seats_requested)."""
+    seats_requested = forms.IntegerField(
+        min_value=1,
+        max_value=4,
+        label='Seats Requested',
+        help_text='You can request up to 4 seats.'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['seats_requested'].widget.attrs['placeholder'] = 'Number of seats'
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+
+    class Meta:
+        model = RideRequest
+        fields = ['seats_requested']

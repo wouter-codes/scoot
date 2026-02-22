@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.html import mark_safe
 from django.urls import reverse
 from .models import Rides, RideRequest, UserProfile
-from .forms import RideSearchForm, RideCreateForm
+from .forms import RideSearchForm, RideCreateForm, RideRequestEditForm
 
 def search_rides(request):
     """Render the home page with ride search form"""
@@ -190,6 +190,39 @@ def my_ride_requests(request):
         'ride_requests': ride_requests,
     }
     return render(request, 'rides/my_ride_requests.html', context)
+
+@login_required(login_url='account_signup')
+def edit_ride_request(request, request_id):
+    """
+    Allow passenger to edit their ride request (increase seat number).
+    """
+    ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
+    ride = ride_request.ride
+    old_seats = ride_request.seats_requested
+    if request.method == 'POST':
+        form = RideRequestEditForm(request.POST, instance=ride_request)
+        if form.is_valid():
+            new_seats = form.cleaned_data['seats_requested']
+            max_allowed = ride.seats_available + old_seats
+            if new_seats > max_allowed:
+                messages.error(request, f'Only {max_allowed} seats are available to request for this ride.')
+                return render(request, 'rides/edit_ride_request.html', {'form': form, 'ride_request': ride_request})
+            seat_diff = new_seats - old_seats
+            if seat_diff > 0:
+                ride.seats_available -= seat_diff
+                ride.save()
+                form.save()
+                messages.success(request, f'Seat number updated to {new_seats}.')
+            else:
+                # If reducing seats, restore seats to ride
+                ride.seats_available += abs(seat_diff)
+                ride.save()
+                form.save()
+                messages.success(request, f'Seat number updated to {new_seats}.')
+            return redirect('my_ride_requests')
+    else:
+        form = RideRequestEditForm(instance=ride_request)
+    return render(request, 'rides/edit_ride_request.html', {'form': form, 'ride_request': ride_request})
 
 @login_required(login_url='account_signup')
 def cancel_ride_request(request, request_id):

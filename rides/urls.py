@@ -12,4 +12,5 @@ urlpatterns = [
     path('my-rides/', views.my_rides, name='my_rides'),
     path('my-ride-requests/', views.my_ride_requests, name='my_ride_requests'),
     path('ride-request/<int:request_id>/cancel/', views.cancel_ride_request, name='cancel_ride_request'),
+    path('ride-request/<int:request_id>/edit/', views.edit_ride_request, name='edit_ride_request'),
 ]
