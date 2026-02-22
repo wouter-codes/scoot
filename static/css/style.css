@@ -62,6 +62,10 @@ select:focus {
 }
 
 /* CARD BODIES GLOBAL */
+.card-footer {
+    margin-top: auto;
+}
+
 .card-hover {
     transition: border-color 0.3s ease;
     border: 1px solid var(--background-color-quaternary);
