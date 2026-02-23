@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from .models import Rides, RideRequest
 from crispy_forms.helper import FormHelper
@@ -16,19 +17,24 @@ class RideSearchForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['date'].required = False
-        
+
+        # Set initial date to current year if not provided
+        if not self.fields['date'].initial:
+            today = datetime.date.today()
+            self.fields['date'].initial = today
+
         # Set placeholders and hide labels
         self.fields['origin'].widget.attrs['placeholder'] = 'Leaving from'
         self.fields['destination'].widget.attrs['placeholder'] = 'Going to'
         self.fields['date'].widget.attrs['placeholder'] = 'On'
         self.fields['min_passengers'].widget.attrs['placeholder'] = 'Passengers'
-        
+
         # Hide labels
         self.fields['origin'].label = ''
         self.fields['destination'].label = ''
         self.fields['date'].label = ''
         self.fields['min_passengers'].label = ''
-        
+
         self.helper = FormHelper()
         self.helper.form_method = 'get'
         self.helper.layout = Layout(
@@ -72,6 +78,12 @@ class RideCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Set initial date to now if not provided
+        if not self.fields['date'].initial:
+            today = datetime.date.today()
+            self.fields['date'].initial = today
+            
         # Set placeholders
         self.fields['origin'].widget.attrs['placeholder'] = 'e.g. Truro'
         self.fields['destination'].widget.attrs['placeholder'] = 'e.g. Falmouth'

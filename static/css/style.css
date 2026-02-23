@@ -21,7 +21,7 @@
 
     /* Card background colours */
     --card-bg-green: #31bb5115; /* Light Green */
-    --card-bg-yellow: #ffe60016; /* Light Yellow */
+    --card-bg-yellow: #ffd90016; /* Light Yellow */
     --card-bg-red: #d8252511; /* Light Red */
 }
 
@@ -134,6 +134,10 @@ textarea:focus,
 select:focus {
     outline: none;
     border-color: var(--background-color-quaternary);
+}
+
+form label {
+    font-weight: bold;
 }
 
 /* CARDS */
