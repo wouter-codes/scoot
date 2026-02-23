@@ -112,8 +112,9 @@
                                 <li><a class="dropdown-item" href="{{ my_rides_url }}">My Rides</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ my_ride_requests_url }}">My Ride Requests</a></li>
+                                <!-- Potential profile drop down for future implementation
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                                <li><a class="dropdown-item" href="#">My Profile</a></li> -->
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
                             </ul>
@@ -125,9 +126,10 @@
                         <li class="nav-item d-sm-none">
                             <a class="nav-link {% if request.path == my_ride_requests_url %}active" aria-current="page {% endif %}" href="{{ my_ride_requests_url }}">My Ride Requests</a>
                         </li>
+                        <!-- Potential profile drop down for future implementation
                         <li class="nav-item d-sm-none">
-                            <a class="nav-link" href="#">My Profile</a>
-                        </li>
+                            <a class="nav-link" href="#">My Profile</a> 
+                        </li> -->
                         <li class="nav-item d-sm-none">
                             <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
                         </li>
