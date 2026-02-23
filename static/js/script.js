@@ -74,25 +74,28 @@ function handleRideModal() {
 document.addEventListener("DOMContentLoaded", function () {
     const openPublishModalBtn = document.getElementById("openPublishModalBtn");
     const confirmPublishBtn = document.getElementById("confirmPublishBtn");
-    const editRideForm = document.getElementById("editRideForm");
     const publishHiddenInput = document.getElementById("publishHiddenInput");
+    // Support both create and edit forms
+    const rideForm =
+        document.getElementById("editRideForm") ||
+        document.getElementById("createRideForm");
     if (
         openPublishModalBtn &&
         confirmPublishBtn &&
-        editRideForm &&
+        rideForm &&
         publishHiddenInput
     ) {
         // Publish: set hidden input and submit
         confirmPublishBtn.addEventListener("click", function () {
             publishHiddenInput.value = "1";
-            editRideForm.submit();
+            rideForm.submit();
         });
         // Save as Draft: clear hidden input before submit
         const saveDraftBtn = document.getElementById("saveDraftBtn");
         if (saveDraftBtn) {
             saveDraftBtn.addEventListener("click", function (e) {
                 publishHiddenInput.value = "0";
-                editRideForm.submit();
+                rideForm.submit();
             });
         }
         // Optional: clear hidden input on modal close

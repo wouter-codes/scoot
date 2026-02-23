@@ -10,13 +10,14 @@
             
             <div class="card">
                 <div class="card-body">
-                    <form method="post">
+                    <form id="createRideForm" method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
+                        <input type="hidden" name="publish" id="publishHiddenInput" value="">
                         <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-3">
                             <a href="{% url 'my_rides' %}" class="btn btn-outline-secondary">Cancel</a>
-                            <button type="submit" name="save_draft" class="btn btn-secondary">Save as Draft</button>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#publishModal" data-publish="true">Publish</button>
+                            <button type="button" name="save_draft" id="saveDraftBtn" class="btn btn-secondary">Save as Draft</button>
+                            <button type="button" class="btn btn-success" id="openPublishModalBtn" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button>
                         </div>
                     </form>
                 </div>
