@@ -62,6 +62,10 @@ select:focus {
     width: 50px;
 }
 
+#logged-in-user-text {
+    color: #ffffff8c;
+}
+
 /* CARD BODIES GLOBAL */
 .card-footer {
     margin-top: auto;
