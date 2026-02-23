@@ -138,12 +138,17 @@ def create_ride(request):
             ride = form.save(commit=False)
             ride.driver = request.user
             # Check which button was pressed
-            if 'publish' in request.POST:
+            publish_value = request.POST.get('publish', '')
+            if publish_value == '1':
                 ride.status = '1'  # Published
                 ride.save()
                 messages.success(request, 'Your ride has been published successfully!')
-            else:
+            elif publish_value == '0':
                 ride.status = '0'  # Draft
+                ride.save()
+                messages.info(request, 'Your ride has been saved as a draft.')
+            else:
+                ride.status = '0'  # Default to draft
                 ride.save()
                 messages.info(request, 'Your ride has been saved as a draft.')
             return redirect('my_rides')
@@ -180,11 +185,21 @@ def edit_ride(request, ride_id):
     
 @login_required(login_url='account_signup')
 def delete_ride(request, ride_id):
-    """Allow ride creator to delete their ride listing."""
+    """Allow ride creator to delete their ride listing, or cancel if accepted requests exist."""
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
-        ride.delete()
-        messages.add_message(request, messages.SUCCESS, 'Ride deleted successfully!')
+        # Check for accepted ride requests
+        accepted_requests = ride.ride_requests.filter(status='1')
+        if accepted_requests.exists():
+            # Cancel the ride instead of deleting
+            ride.status = '2'  # Cancelled
+            ride.save()
+            # Update accepted requests to 'Cancelled by driver'
+            accepted_requests.update(status='5')
+            messages.add_message(request, messages.WARNING, 'Ride cancelled because there were accepted ride requests. Passengers have been notified.')
+        else:
+            ride.delete()
+            messages.add_message(request, messages.SUCCESS, 'Ride deleted successfully!')
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own rides!')
     return redirect('my_rides')

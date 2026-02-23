@@ -71,6 +71,15 @@ select:focus {
     border: 1px solid var(--background-color-quaternary);
 }
 
+/* Enlarge status badge to match button size */
+.status-badge {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+}
+
 /* Prevent active state styling on Find Your Ride button */
 #find-ride-btn {
     background-color: transparent;

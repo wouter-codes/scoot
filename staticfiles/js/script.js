@@ -19,29 +19,90 @@ document.addEventListener("DOMContentLoaded", function () {
 // JavaScript to handle the delete confirmation modal
 
 document.addEventListener("DOMContentLoaded", function () {
-    handleDeleteModal();
-    handleCancelModal();
+    handleRideModal();
+    handleRideRequestModal();
 });
-function handleCancelModal() {
-    const cancelModal = document.getElementById("cancelModal");
-    if (!cancelModal) return;
-    cancelModal.addEventListener("show.bs.modal", function (event) {
+
+function handleRideRequestModal() {
+    const rideRequestModal = document.getElementById("rideRequestModal");
+    if (!rideRequestModal) return;
+    rideRequestModal.addEventListener("show.bs.modal", function (event) {
         const button = event.relatedTarget;
-        const cancelUrl = button.getAttribute("data-cancel-url");
-        const form = document.getElementById("cancelRideForm");
-        if (form && cancelUrl) {
-            form.action = cancelUrl;
+        const actionUrl = button.getAttribute("data-cancel-url");
+        const form = document.getElementById("rideRequestForm");
+        if (form && actionUrl) {
+            form.action = actionUrl;
+        }
+
+        // Set modal title, body, and confirm button text dynamically
+        const modalTitle = rideRequestModal.querySelector(".modal-title");
+        const modalBody = rideRequestModal.querySelector(".modal-body");
+        const confirmBtn = rideRequestModal.querySelector(
+            ".modal-footer .btn.btn-danger",
+        );
+        if (button && modalTitle && modalBody && confirmBtn) {
+            const actionText = button.textContent.trim(); // "Delete" or "Cancel"
+            if (actionText === "Delete") {
+                modalTitle.textContent = "Confirm Delete";
+                modalBody.textContent =
+                    "Are you sure you want to delete this ride request?";
+                confirmBtn.textContent = "Yes, delete";
+            } else {
+                modalTitle.textContent = "Confirm Cancellation";
+                modalBody.textContent =
+                    "Are you sure you want to cancel this ride request?";
+                confirmBtn.textContent = "Yes, cancel";
+            }
         }
     });
 }
 
-function handleDeleteModal() {
-    const deleteModal = document.getElementById("deleteModal");
-    if (!deleteModal) return;
-    deleteModal.addEventListener("show.bs.modal", function (event) {
+function handleRideModal() {
+    const rideModal = document.getElementById("rideModal");
+    if (!rideModal) return;
+    rideModal.addEventListener("show.bs.modal", function (event) {
         const button = event.relatedTarget;
         const deleteUrl = button.getAttribute("data-delete-url");
-        const form = document.getElementById("deleteRideForm");
-        form.action = deleteUrl;
+        const form = document.getElementById("rideForm");
+        if (form && deleteUrl) {
+            form.action = deleteUrl;
+        }
     });
 }
+
+// Handle publish modal for edit ride form
+document.addEventListener("DOMContentLoaded", function () {
+    const openPublishModalBtn = document.getElementById("openPublishModalBtn");
+    const confirmPublishBtn = document.getElementById("confirmPublishBtn");
+    const publishHiddenInput = document.getElementById("publishHiddenInput");
+    // Support both create and edit forms
+    const rideForm =
+        document.getElementById("editRideForm") ||
+        document.getElementById("createRideForm");
+    if (
+        openPublishModalBtn &&
+        confirmPublishBtn &&
+        rideForm &&
+        publishHiddenInput
+    ) {
+        // Publish: set hidden input and submit
+        confirmPublishBtn.addEventListener("click", function () {
+            publishHiddenInput.value = "1";
+            rideForm.submit();
+        });
+        // Save as Draft: clear hidden input before submit
+        const saveDraftBtn = document.getElementById("saveDraftBtn");
+        if (saveDraftBtn) {
+            saveDraftBtn.addEventListener("click", function (e) {
+                publishHiddenInput.value = "0";
+                rideForm.submit();
+            });
+        }
+        // Optional: clear hidden input on modal close
+        document
+            .getElementById("publishModal")
+            .addEventListener("hidden.bs.modal", function () {
+                publishHiddenInput.value = "";
+            });
+    }
+});
