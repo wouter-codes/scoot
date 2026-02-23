@@ -2,75 +2,50 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-12">
-            <h5 class="mb-3">
-                <a href="{% url 'search_rides' %}" class="text-decoration-none">
-                    &larr; Back to all available rides
-                </a>
-            </h5>
-            <h1 class="mb-4">My Ride Requests</h1>
-
-            {% if ride_requests %}
-                <div class="row">
-                    {% for ride_request in ride_requests %}
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <a href="{% url 'ride_detail' ride_request.ride.id %}" class="text-decoration-none card-link-wrapper">
-                                <div class="card-body text-dark">
-                                    <h5 class="card-title">{{ ride_request.ride.origin }} → {{ ride_request.ride.destination }}</h5>
-                                    <p class="card-text">
-                                        <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
-                                        <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
-                                        <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
-                                        <!-- Status moved to footer for consistent styling -->
-                                        {% if ride_request.ride.pickup_notes %}
-                                        <strong>Pickup Notes:</strong> {{ ride_request.ride.pickup_notes }}<br>
-                                        {% endif %}
-                                    </p>
-                                </div>
+                        <h5 class="mb-3">
+                            <a href="{% url 'search_rides' %}" class="text-decoration-none">
+                                &larr; Back to all available rides
                             </a>
-                            <div class="card-footer d-flex justify-content-between align-items-center gap-2">
-                                <div>
-                                    <strong>Status: </strong>
-                                    <span class="badge status-badge
-                                        {% if ride_request.status == '0' %}bg-warning text-dark
-                                        {% elif ride_request.status == '1' %}bg-success
-                                        {% elif ride_request.status == '2' %}bg-danger
-                                        {% elif ride_request.status == '3' %}bg-secondary
-                                        {% elif ride_request.status == '4' %}bg-info
-                                        {% elif ride_request.status == '5' %}bg-secondary
-                                        {% endif %}">
-                                        {% if ride_request.status == '0' %}Pending
-                                        {% elif ride_request.status == '1' %}Accepted
-                                        {% elif ride_request.status == '2' %}Declined
-                                        {% elif ride_request.status == '3' %}Cancelled by passenger
-                                        {% elif ride_request.status == '4' %}Completed
-                                        {% elif ride_request.status == '5' %}Cancelled by driver
-                                        {% endif %}
-                                    </span>
+                        </h5>
+                        <h1 class="mb-4">My Ride Requests</h1>
+
+                        {% if accepted_requests or pending_requests or voided_requests %}
+                            {% if accepted_requests %}
+                                <div class="card-group-container mb-4 p-3 border rounded">
+                                    <h2 class="mb-3 accept-title">Accepted</h2>
+                                    <div class="row">
+                                        {% for ride_request in accepted_requests %}
+                                            {% include "rides/_ride_request_card.html" with ride_request=ride_request %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                                <div class="d-flex gap-2">
-                                    {% if ride_request.status == '0' %}
-                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Delete</button>
-                                    {% elif ride_request.status == '1' and ride_request.id %}
-                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                    {% else %}
-                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                    {% endif %}
+                            {% endif %}
+                            {% if pending_requests %}
+                                <div class="card-group-container mb-4 p-3 border rounded">
+                                    <h2 class="mb-3 pending-title">Pending</h2>
+                                    <div class="row">
+                                        {% for ride_request in pending_requests %}
+                                            {% include "rides/_ride_request_card.html" with ride_request=ride_request %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
+                            {% endif %}
+                            {% if voided_requests %}
+                                <div class="card-group-container mb-4 p-3 border rounded">
+                                    <h2 class="mb-3 voided-title">Voided</h2>
+                                    <div class="row">
+                                        {% for ride_request in voided_requests %}
+                                            {% include "rides/_ride_request_card.html" with ride_request=ride_request %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">No Ride Requests Yet</h4>
+                                <p>You haven't requested any rides yet. <a href="{% url 'search_rides' %}" class="link">Browse available rides</a> to get started!</p>
                             </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="alert alert-info" role="alert">
-                    <h4 class="alert-heading">No Ride Requests Yet</h4>
-                    <p>You haven't requested any rides yet. <a href="{% url 'search_rides' %}" class="link">Browse available rides</a> to get started!</p>
-                </div>
-            {% endif %}
+                        {% endif %}
         </div>
     </div>
 </div>

@@ -49,10 +49,18 @@ def search_rides(request):
 @login_required(login_url='account_signup')
 def my_rides(request):
     """Display all rides created by the logged-in user."""
-    rides = Rides.objects.filter(driver=request.user).order_by('-date')
-    # Annotate each ride with count of only pending requests
-    rides = rides.annotate(request_count=Count('ride_requests', filter=Q(ride_requests__status='0')))
-    return render(request, 'rides/my_rides.html', {'rides': rides})
+    all_rides = Rides.objects.filter(driver=request.user).order_by('-date')
+    all_rides = all_rides.annotate(request_count=Count('ride_requests', filter=Q(ride_requests__status='0')))
+
+    published_rides = [r for r in all_rides if r.status == '1']
+    draft_rides = [r for r in all_rides if r.status == '0']
+    voided_rides = [r for r in all_rides if r.status not in ['0', '1']]
+
+    return render(request, 'rides/my_rides.html', {
+        'published_rides': published_rides,
+        'draft_rides': draft_rides,
+        'voided_rides': voided_rides,
+    })
 
 def ride_detail(request, ride_id):
     """Display full details for a single ride."""
@@ -211,12 +219,18 @@ def my_ride_requests(request):
     """
     Display all ride requests (bookings) for the logged-in user.
     """
-    ride_requests = RideRequest.objects.filter(
+    all_requests = RideRequest.objects.filter(
         passenger=request.user
     ).select_related('ride').order_by('-ride__date')
-    
+
+    accepted_requests = [r for r in all_requests if r.status == '1']
+    pending_requests = [r for r in all_requests if r.status == '0']
+    voided_requests = [r for r in all_requests if r.status in ['2', '3', '4', '5']]
+
     context = {
-        'ride_requests': ride_requests,
+        'accepted_requests': accepted_requests,
+        'pending_requests': pending_requests,
+        'voided_requests': voided_requests,
     }
     return render(request, 'rides/my_ride_requests.html', context)
 

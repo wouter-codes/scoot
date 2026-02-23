@@ -8,7 +8,7 @@
                 {% if user.is_authenticated and ride.driver == user %}
                     <a href="{% url 'my_rides' %}" class="text-decoration-none">&larr; Back to my rides</a>
                 {% else %}
-                    <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
+                    <a href="{% url 'my_ride_requests' %}" class="text-decoration-none">&larr; See all requested rides</a>
                 {% endif %}
             </h5>
             {% if ride_request %}
@@ -103,65 +103,66 @@
                             {% endif %}
                         </div>
                 </div>
-            </div>
-            {% if user.is_authenticated and ride.driver == user and ride_requests %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Passenger Requests</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Passenger</th>
-                                <th>Status</th>
-                                <th>Seats</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for req in ride_requests %}
-                            <tr>
-                                <td>{{ req.passenger.get_full_name|default:req.passenger.username }}</td>
-                                <td>
-                                    {% if req.status == '0' %}
-                                        <span class="badge bg-warning">Pending</span>
-                                    {% elif req.status == '1' %}
-                                        <span class="badge bg-success">Accepted</span>
-                                    {% elif req.status == '2' %}
-                                        <span class="badge bg-danger">Rejected</span>
-                                    {% elif req.status == '3' %}
-                                        <span class="badge bg-secondary">Cancelled by passenger</span>
-                                    {% elif req.status == '5' %}
-                                        <span class="badge bg-secondary">Cancelled by driver</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Cancelled</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ req.seats_requested }}</td>
-                                <td>
-                                    {% if req.status == '0' %}
-                                        <form method="post" action="{% url 'approve_ride_request' req.id %}" style="display:inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                                        </form>
-                                        <form method="post" action="{% url 'reject_ride_request' req.id %}" style="display:inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                        </form>
-                                    {% elif req.status == '1' %}
-                                        <form method="post" action="{% url 'cancel_ride_request' req.id %}" style="display:inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger btn-sm">Cancel Request</button>
-                                        </form>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="4">No requests yet.</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            
+                {% if user.is_authenticated and ride.driver == user and ride_requests %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Passenger Requests</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Passenger</th>
+                                    <th>Status</th>
+                                    <th>Seats</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for req in ride_requests %}
+                                <tr>
+                                    <td>{{ req.passenger.get_full_name|default:req.passenger.username }}</td>
+                                    <td>
+                                        {% if req.status == '0' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif req.status == '1' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elif req.status == '2' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% elif req.status == '3' %}
+                                            <span class="badge bg-secondary">Cancelled by passenger</span>
+                                        {% elif req.status == '5' %}
+                                            <span class="badge bg-secondary">Cancelled by driver</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ req.seats_requested }}</td>
+                                    <td>
+                                        {% if req.status == '0' %}
+                                            <form method="post" action="{% url 'approve_ride_request' req.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                            </form>
+                                            <form method="post" action="{% url 'reject_ride_request' req.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                            </form>
+                                        {% elif req.status == '1' %}
+                                            <form method="post" action="{% url 'cancel_ride_request' req.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Cancel Request</button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4">No requests yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {% endif %}

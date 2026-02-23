@@ -17,6 +17,7 @@
     --background-color-secondary: #02374f; /* Deep Space Blue */
     --background-color-tertiary: #0e5c81; /* Charcoal Blue */
     --background-color-quaternary: #0d85bd; /* Blue Bell */
+    --background-color-quinary: #0d85bd08; /* Blue Bell */
 }
 
 /* GLOBAL STYLES */
@@ -69,6 +70,10 @@ select:focus {
 .card-hover {
     transition: border-color 0.3s ease;
     border: 1px solid var(--background-color-quaternary);
+}
+
+.card-group-container {
+    background-color: var(--background-color-quinary);
 }
 
 /* Enlarge status badge to match button size */
