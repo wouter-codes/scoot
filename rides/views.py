@@ -160,15 +160,19 @@ def edit_ride(request, ride_id):
         form = RideCreateForm(request.POST or None, instance=ride)
         if request.method == 'POST' and form.is_valid():
             ride = form.save(commit=False)
-            if 'publish' in request.POST:
+            if request.POST.get('publish') == '1':
                 ride.status = '1'  # Published
                 ride.save()
                 messages.success(request, 'Ride published successfully!')
-            else:
+                return redirect('my_rides')
+            elif request.POST.get('publish') == '0':
+                if ride.ride_requests.exists():
+                    messages.error(request, 'You cannot save this ride as a draft because there are ride requests for it.')
+                    return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
                 ride.status = '0'  # Draft
                 ride.save()
                 messages.info(request, 'Ride saved as draft.')
-            return redirect('my_rides')
+                return redirect('my_rides')
         return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
     else:
         messages.add_message(request, messages.ERROR, 'You can only edit your own rides!')

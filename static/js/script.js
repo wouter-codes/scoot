@@ -69,3 +69,37 @@ function handleRideModal() {
         }
     });
 }
+
+// Handle publish modal for edit ride form
+document.addEventListener("DOMContentLoaded", function () {
+    const openPublishModalBtn = document.getElementById("openPublishModalBtn");
+    const confirmPublishBtn = document.getElementById("confirmPublishBtn");
+    const editRideForm = document.getElementById("editRideForm");
+    const publishHiddenInput = document.getElementById("publishHiddenInput");
+    if (
+        openPublishModalBtn &&
+        confirmPublishBtn &&
+        editRideForm &&
+        publishHiddenInput
+    ) {
+        // Publish: set hidden input and submit
+        confirmPublishBtn.addEventListener("click", function () {
+            publishHiddenInput.value = "1";
+            editRideForm.submit();
+        });
+        // Save as Draft: clear hidden input before submit
+        const saveDraftBtn = document.getElementById("saveDraftBtn");
+        if (saveDraftBtn) {
+            saveDraftBtn.addEventListener("click", function (e) {
+                publishHiddenInput.value = "0";
+                editRideForm.submit();
+            });
+        }
+        // Optional: clear hidden input on modal close
+        document
+            .getElementById("publishModal")
+            .addEventListener("hidden.bs.modal", function () {
+                publishHiddenInput.value = "";
+            });
+    }
+});
