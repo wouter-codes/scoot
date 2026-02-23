@@ -85,8 +85,13 @@
                         {% if user.is_authenticated %}
                         <!-- Find your ride button -->
                         <li class="nav-item">
-                            <a href="{{ home_url }}" class="btn btn-outline-light d-sm-none mt-3"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Your Ride</a>
-                            <a href="{{ home_url }}" class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block" id="find-ride-btn"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Your Ride</a>
+                            <a href="{{ home_url }}" class="btn btn-outline-light d-sm-none mt-3"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Ride</a>
+                            <a href="{{ home_url }}" class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block" id="find-ride-btn"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Ride</a>
+                        </li>
+                        <!-- Offer a ride button, styled like Find Your Ride -->
+                        <li class="nav-item">
+                            <a href="{% url 'create_ride' %}" class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block" id="offer-ride-btn"><i class="fa-solid fa-plus"></i> Offer Ride</a>
+                            <a href="{% url 'create_ride' %}" class="btn btn-outline-light d-sm-none mt-3"><i class="fa-solid fa-plus"></i> Offer Ride</a>
                         </li>
                         <!-- Profile dropdown - visible when navbar is expanded (sm and up) -->
                         <li class="nav-item dropdown d-none d-sm-block">
