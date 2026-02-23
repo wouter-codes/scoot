@@ -1,4 +1,4 @@
-/* CSS Variables for consistent styling */
+/* CSS VARIABLES */
 :root {
     /* Typography */
     --primary-font: "Lexend", sans-serif;
@@ -18,6 +18,11 @@
     --background-color-tertiary: #0e5c81; /* Charcoal Blue */
     --background-color-quaternary: #0d85bd; /* Blue Bell */
     --background-color-quinary: #0d85bd08; /* Blue Bell */
+
+    /* Card background colours */
+    --card-bg-green: #31bb5115; /* Light Green */
+    --card-bg-yellow: #ffe60016; /* Light Yellow */
+    --card-bg-red: #d8252511; /* Light Red */
 }
 
 /* GLOBAL STYLES */
@@ -33,6 +38,85 @@ h2,
 h3 {
     font-family: var(--primary-font);
     color: var(--primary-color);
+}
+
+/* NAVBAR */
+#navbar {
+    background-color: var(--background-color-secondary);
+    color: var(--third-color);
+}
+
+#navbar .logo {
+    width: 50px;
+}
+
+#logged-in-user-text {
+    color: #ffffff8c;
+}
+
+/* BUTTONS */
+.btn {
+    border-radius: 20px;
+}
+
+.btn-primary {
+    background-color: var(--background-color-tertiary);
+    border-color: var(--background-color-tertiary);
+    color: var(--third-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--background-color-quaternary);
+    border-color: var(--background-color-quaternary);
+    color: var(--third-color);
+}
+
+.btn-danger {
+    background-color: #c24949;
+}
+
+.custom-btn {
+    background-color: var(--background-color-tertiary);
+    color: var(--third-color);
+}
+
+.custom-btn:hover {
+    background-color: var(--background-color-quaternary);
+    color: var(--third-color);
+}
+
+.search-btn {
+    border-radius: 20px !important;
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Ride card buttons - min width on larger screens */
+.ride-btn {
+    min-width: 33%;
+}
+
+.available-rides .btn-warning {
+    opacity: 0.5;
+}
+
+/* Prevent active state styling on Find Your Ride button */
+#find-ride-btn {
+    background-color: transparent;
+    color: var(--third-color);
+}
+
+#find-ride-btn:hover {
+    background-color: var(--third-color);
+    color: var(--background-color-secondary);
+}
+
+/* LOGO AND BRANDING */
+#logo-title {
+    font-family: var(--tertiary-font);
+    font-size: 3rem;
+    line-height: 0;
 }
 
 /* FORMS */
@@ -52,21 +136,7 @@ select:focus {
     border-color: var(--background-color-quaternary);
 }
 
-/* NAVBAR */
-#navbar {
-    background-color: var(--background-color-secondary);
-    color: var(--third-color);
-}
-
-#navbar .logo {
-    width: 50px;
-}
-
-#logged-in-user-text {
-    color: #ffffff8c;
-}
-
-/* CARD BODIES GLOBAL */
+/* CARDS */
 .card-footer {
     margin-top: auto;
 }
@@ -76,8 +146,16 @@ select:focus {
     border: 1px solid var(--background-color-quaternary);
 }
 
-.card-group-container {
-    background-color: var(--background-color-quinary);
+.card-green {
+    background-color: var(--card-bg-green);
+}
+
+.card-yellow {
+    background-color: var(--card-bg-yellow);
+}
+
+.card-red {
+    background-color: var(--card-bg-red);
 }
 
 /* Enlarge status badge to match button size */
@@ -89,57 +167,7 @@ select:focus {
     text-align: center;
 }
 
-/* Prevent active state styling on Find Your Ride button */
-#find-ride-btn {
-    background-color: transparent;
-    color: var(--third-color);
-}
-
-#find-ride-btn:hover {
-    background-color: var(--third-color);
-    color: var(--background-color-secondary);
-}
-
-#logo-title {
-    font-family: var(--tertiary-font);
-    font-size: 3rem;
-    line-height: 0;
-}
-
-/* Button border radius */
-.btn {
-    border-radius: 20px;
-}
-
-/* Style primary buttons with tertiary color */
-.btn-primary {
-    background-color: var(--background-color-tertiary);
-    border-color: var(--background-color-tertiary);
-    color: var(--third-color);
-}
-
-.btn-primary:hover {
-    background-color: var(--background-color-quaternary);
-    border-color: var(--background-color-quaternary);
-    color: var(--third-color);
-}
-
-.available-rides .btn-warning {
-    opacity: 0.5;
-}
-
-/* Ride card buttons - min width on larger screens */
-.ride-btn {
-    min-width: 33%;
-}
-
-/* MY RIDES */
-/* Delete buttons styling */
-.btn-danger {
-    background-color: #c24949;
-}
-
-/* Back link styling */
+/* LINKS */
 .text-decoration-none {
     color: var(--background-color-tertiary);
 }
@@ -162,28 +190,17 @@ select:focus {
     color: var(--fifth-color);
 }
 
-/* LOGIN */
+/* LOGIN & SIGNUP */
 /* Hide "Forgot your password" on the login page */
 .helptext {
     display: none;
 }
 
-/* SIGN UP */
 /* Hide email field on signup page */
 #div_id_email,
 label[for="id_email"],
 input[name="email"] {
     display: none;
-}
-
-.custom-btn {
-    background-color: var(--background-color-tertiary);
-    color: var(--third-color);
-}
-
-.custom-btn:hover {
-    background-color: var(--background-color-quaternary);
-    color: var(--third-color);
 }
 
 /* MEDIA QUERIES */
@@ -198,5 +215,8 @@ input[name="email"] {
     }
 }
 
-@media (min-width: 576px) {
+@media (max-width: 992px) {
+    .search-btn {
+        max-width: 33% !important;
+    }
 }

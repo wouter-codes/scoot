@@ -87,7 +87,7 @@
                         <li class="nav-item d-flex align-items-center">
                             <a href="{{ home_url }}" class="btn btn-outline-light d-sm-none mt-2"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Ride</a>
                             <a href="{{ home_url }}" class="btn btn-outline-light ms-lg-3 d-none d-sm-inline-block" id="find-ride-btn"{% if request.path == home_url %} aria-current="page"{% endif %}>Find Ride</a>
-                            <span id="logged-in-user-text" class="d-sm-none small ms-auto me-3">Logged in as {{ user.username }}</span>
+                            <span id="logged-in-user-text" class="d-sm-none small ms-auto me-3 mt-1">Logged in as {{ user.username }}</span>
                         </li>
                         <!-- Offer a ride button, styled like Find Your Ride -->
                         <li class="nav-item">
@@ -152,7 +152,7 @@
             </div>
         </nav>
 
-        <main class="flex-shrink-0 main-bg mt-5">
+        <main class="flex-shrink-0 main-bg mt-3">
             <!-- Messages -->
             {% if messages %}
             <div class="container mt-3">

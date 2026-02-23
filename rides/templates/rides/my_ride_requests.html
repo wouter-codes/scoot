@@ -11,7 +11,7 @@
 
                         {% if accepted_requests or pending_requests or voided_requests %}
                             {% if accepted_requests %}
-                                <div class="card-group-container mb-4 p-3 border rounded">
+                                <div class="card-group-container card-green mb-4 p-3 border rounded">
                                     <h2 class="mb-3 accept-title">Accepted</h2>
                                     <div class="row">
                                         {% for ride_request in accepted_requests %}
@@ -21,7 +21,7 @@
                                 </div>
                             {% endif %}
                             {% if pending_requests %}
-                                <div class="card-group-container mb-4 p-3 border rounded">
+                                <div class="card-group-container card-yellow mb-4 p-3 border rounded">
                                     <h2 class="mb-3 pending-title">Pending</h2>
                                     <div class="row">
                                         {% for ride_request in pending_requests %}
@@ -31,7 +31,7 @@
                                 </div>
                             {% endif %}
                             {% if voided_requests %}
-                                <div class="card-group-container mb-4 p-3 border rounded">
+                                <div class="card-group-container card-red mb-4 p-3 border rounded">
                                     <h2 class="mb-3 voided-title">Voided</h2>
                                     <div class="row">
                                         {% for ride_request in voided_requests %}

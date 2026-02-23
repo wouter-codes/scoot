@@ -11,7 +11,7 @@
             
             {% if published_rides or draft_rides or voided_rides %}
                 {% if published_rides %}
-                    <div class="card-group-container mb-4 p-3 border rounded">
+                    <div class="card-group-container card-green mb-4 p-3 border rounded">
                         <h2 class="mb-3">Published</h2>
                         <div class="row">
                             {% for ride in published_rides %}
@@ -21,7 +21,7 @@
                     </div>
                 {% endif %}
                 {% if draft_rides %}
-                    <div class="card-group-container mb-4 p-3 border rounded">
+                    <div class="card-group-container card-yellow mb-4 p-3 border rounded">
                         <h2 class="mb-3">Drafts</h2>
                         <div class="row">
                             {% for ride in draft_rides %}
@@ -31,7 +31,7 @@
                     </div>
                 {% endif %}
                 {% if voided_rides %}
-                    <div class="card-group-container mb-4 p-3 border rounded">
+                    <div class="card-group-container card-red mb-4 p-3 border rounded">
                         <h2 class="mb-3">Voided</h2>
                         <div class="row">
                             {% for ride in voided_rides %}
