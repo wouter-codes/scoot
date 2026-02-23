@@ -40,9 +40,11 @@
                             {% elif ride_request.status == '2' %}
                                 <span class="badge bg-danger">Rejected</span>
                             {% elif ride_request.status == '3' %}
-                                <span class="badge bg-secondary">Cancelled</span>
+                                <span class="badge bg-secondary">Cancelled by passenger</span>
                             {% elif ride_request.status == '4' %}
                                 <span class="badge bg-info">Completed</span>
+                            {% elif ride_request.status == '5' %}
+                                <span class="badge bg-secondary">Cancelled by driver</span>
                             {% endif %}
                         {% elif user.is_authenticated and ride.driver == user %}
                             <strong>Status:</strong><span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
@@ -59,7 +61,7 @@
                         <!-- Delete button -->
                         <button type="button" class="btn btn-danger btn-sm"
                             data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"
+                            data-bs-target="#rideModal"
                             data-delete-url="{% url 'delete_ride' ride.id %}">
                             Delete
                         </button>
@@ -73,7 +75,7 @@
                     {% elif ride_request %}
                         {% if ride_request.status == '0' or ride_request.status == '1' and ride_request.id %}
                             <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
                         {% endif %}
                     {% else %}
                         {% if user.is_authenticated %}
@@ -109,9 +111,11 @@
                                     {% elif req.status == '2' %}
                                         <span class="badge bg-danger">Rejected</span>
                                     {% elif req.status == '3' %}
+                                        <span class="badge bg-secondary">Cancelled by passenger</span>
+                                    {% elif req.status == '5' %}
+                                        <span class="badge bg-secondary">Cancelled by driver</span>
+                                    {% else %}
                                         <span class="badge bg-secondary">Cancelled</span>
-                                    {% elif req.status == '4' %}
-                                        <span class="badge bg-info">Completed</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ req.seats_requested }}</td>

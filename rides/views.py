@@ -249,7 +249,12 @@ def cancel_ride_request(request, request_id):
             # Restore seats if previously approved
             ride.seats_available += ride_request.seats_requested
             ride.save()
-            ride_request.delete()
+            # Set status to cancelled by passenger or driver
+            if request.user == ride_request.passenger:
+                ride_request.status = '3'  # Cancelled by passenger
+            else:
+                ride_request.status = '5'  # Cancelled by driver
+            ride_request.save()
             messages.success(request, 'The approved ride request was cancelled and the seat(s) restored.')
         elif ride_request.status == '0':
             # Pending: just delete, no seat restoration needed

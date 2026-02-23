@@ -14,36 +14,41 @@
                     {% for ride_request in ride_requests %}
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ ride_request.ride.origin }} → {{ ride_request.ride.destination }}</h5>
-                                <p class="card-text">
-                                    <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
-                                    <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
-                                    <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
-                                    <span><strong>Status:</strong></span>
-                                    {% if ride_request.status == '0' %}
-                                        <span class="badge bg-warning">Pending</span>
-                                    {% elif ride_request.status == '1' %}
-                                        <span class="badge bg-success">Accepted</span>
-                                    {% elif ride_request.status == '2' %}
-                                        <span class="badge bg-danger">Declined</span>
-                                    {% endif %}<br>
-                                    {% if ride_request.ride.pickup_notes %}
-                                    <strong>Pickup Notes:</strong> {{ ride_request.ride.pickup_notes }}<br>
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-end align-items-center">
-                                    {% if ride_request.status == '0' or ride_request.status == '1' and ride_request.id %}
-                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                    {% else %}
-                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#cancelModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                    {% endif %}
+                            <a href="{% url 'ride_detail' ride_request.ride.id %}" class="text-decoration-none card-link-wrapper">
+                                <div class="card-body text-dark">
+                                    <h5 class="card-title">{{ ride_request.ride.origin }} → {{ ride_request.ride.destination }}</h5>
+                                    <p class="card-text">
+                                        <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
+                                        <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
+                                        <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
+                                        <span><strong>Status:</strong></span>
+                                        {% if ride_request.status == '0' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif ride_request.status == '1' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elif ride_request.status == '2' %}
+                                            <span class="badge bg-danger">Declined</span>
+                                        {% endif %}<br>
+                                        {% if ride_request.ride.pickup_notes %}
+                                        <strong>Pickup Notes:</strong> {{ ride_request.ride.pickup_notes }}<br>
+                                        {% endif %}
+                                    </p>
                                 </div>
+                            </a>
+                            <div class="card-footer d-flex justify-content-end align-items-center">
+                                {% if ride_request.status == '0' %}
+                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Delete</button>
+                                {% elif ride_request.status == '1' and ride_request.id %}
+                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                                {% else %}
+                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                                {% endif %}
                             </div>
                         </div>
+                    </div>
                     {% endfor %}
                 </div>
             {% else %}

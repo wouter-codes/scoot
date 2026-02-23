@@ -17,8 +17,9 @@ RIDES_STATUS = (('0', 'Draft'), ('1', 'Published'), ('2', 'Cancelled'))
 REQUEST_STATUS = (('0', 'Pending'),
                   ('1', 'Accepted'),
                   ('2', 'Rejected'),
-                  ('3', 'Cancelled'),
-                  ('4', 'Completed'),)
+                  ('3', 'Cancelled by passenger'),
+                  ('4', 'Completed'),
+                  ('5', 'Cancelled by driver'),)
 
 def validate_future_date(value):
     """Ensure ride date is in the future."""
