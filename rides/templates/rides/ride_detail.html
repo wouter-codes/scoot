@@ -22,7 +22,12 @@
                     <p class="card-text">
                         <strong>Date & Time:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
                         <strong>Available Seats:</strong> {{ ride.seats_available }}<br>
+                        {% if ride_request %}
+                        <small class="text-muted">Seats are only reserved after a request is approved by the driver.</small><br>
+                        {% endif %}
+                        {% if ride_request %}
                         <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}<br>
+                        {% endif %}
                         {% if ride.pickup_notes %}
                         <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
                         {% endif %}
@@ -111,10 +116,20 @@
                                 </td>
                                 <td>{{ req.seats_requested }}</td>
                                 <td>
-                                    <!-- Example action buttons, implement views as needed -->
                                     {% if req.status == '0' %}
-                                        <a href="#" class="btn btn-success btn-sm">Accept</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                        <form method="post" action="{% url 'approve_ride_request' req.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                        </form>
+                                        <form method="post" action="{% url 'reject_ride_request' req.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                        </form>
+                                    {% elif req.status == '1' %}
+                                        <form method="post" action="{% url 'cancel_ride_request' req.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">Cancel Request</button>
+                                        </form>
                                     {% endif %}
                                 </td>
                             </tr>

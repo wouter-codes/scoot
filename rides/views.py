@@ -107,9 +107,7 @@ def request_ride(request, ride_id):
             status='0'  # Pending status
         )
         
-        # Decrement available seats
-        ride.seats_available -= seats_requested
-        ride.save()
+        # Do not decrement available seats here; seats will be deducted only when request is approved
         
         # Redirect to confirmation page
         return redirect('ride_request_confirmation', request_id=ride_request.id)
@@ -222,13 +220,13 @@ def edit_ride_request(request, request_id):
                 ride.seats_available -= seat_diff
                 ride.save()
                 form.save()
-                messages.success(request, f'Seat number updated to {new_seats}.')
+                messages.success(request, f'Requested seat number updated to {new_seats}.')
             else:
                 # If reducing seats, restore seats to ride
                 ride.seats_available += abs(seat_diff)
                 ride.save()
                 form.save()
-                messages.success(request, f'Seat number updated to {new_seats}.')
+                messages.success(request, f'Requested seat number updated to {new_seats}.')
             return redirect('my_ride_requests')
     else:
         form = RideRequestEditForm(instance=ride_request)
@@ -237,22 +235,83 @@ def edit_ride_request(request, request_id):
 @login_required(login_url='account_signup')
 def cancel_ride_request(request, request_id):
     """
-    Allow passenger to cancel their ride request, restore seats, and show confirmation.
+    Allow passenger or driver to cancel a ride request, restore seats if approved, and show confirmation.
     """
-    ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
+    ride_request = get_object_or_404(RideRequest, id=request_id)
     ride = ride_request.ride
+    # Only allow the passenger or the driver to cancel
+    if request.user != ride_request.passenger and request.user != ride.driver:
+        messages.error(request, 'You are not authorized to cancel this request.')
+        return redirect('ride_detail', ride_id=ride.id)
     if request.method == 'POST':
         # Only allow cancel if pending or approved
-        if ride_request.status in ['0', '1']:
+        if ride_request.status == '1':
             # Restore seats if previously approved
             ride.seats_available += ride_request.seats_requested
             ride.save()
             ride_request.delete()
-            messages.success(request, 'Your ride request was cancelled and the seat(s) restored.')
+            messages.success(request, 'The approved ride request was cancelled and the seat(s) restored.')
+        elif ride_request.status == '0':
+            # Pending: just delete, no seat restoration needed
+            ride_request.delete()
+            messages.success(request, 'The pending ride request was cancelled.')
         else:
             messages.error(request, 'You cannot cancel a declined or already cancelled request.')
+        # Redirect to appropriate page
+        if request.user == ride.driver:
+            return redirect('ride_detail', ride_id=ride.id)
+        else:
+            return redirect('my_ride_requests')
+    # GET fallback
+    if request.user == ride.driver:
+        return redirect('ride_detail', ride_id=ride.id)
+    else:
         return redirect('my_ride_requests')
-    return redirect('my_ride_requests')
+
+@login_required(login_url='account_signup')
+def approve_ride_request(request, request_id):
+    """
+    Allow driver to approve a pending ride request and deduct seats.
+    """
+    ride_request = get_object_or_404(RideRequest, id=request_id)
+    ride = ride_request.ride
+    if request.user != ride.driver:
+        messages.error(request, 'You are not authorized to approve this request.')
+        return redirect('ride_detail', ride_id=ride.id)
+    if ride_request.status != '0':
+        messages.error(request, 'Only pending requests can be approved.')
+        return redirect('ride_detail', ride_id=ride.id)
+    if ride.seats_available < ride_request.seats_requested:
+        messages.error(request, f'Not enough seats available to approve this request. Only {ride.seats_available} left.')
+        return redirect('ride_detail', ride_id=ride.id)
+    # Approve and deduct seats
+    ride.seats_available -= ride_request.seats_requested
+    ride.save()
+    ride_request.status = '1'  # Approved
+    ride_request.save()
+    messages.success(request, 'Ride request approved and seats reserved.')
+    return redirect('ride_detail', ride_id=ride.id)
+
+@login_required(login_url='account_signup')
+def reject_ride_request(request, request_id):
+    """
+    Allow driver to reject a pending ride request.
+    """
+    ride_request = get_object_or_404(RideRequest, id=request_id)
+    ride = ride_request.ride
+    if request.user != ride.driver:
+        messages.error(request, 'You are not authorized to reject this request.')
+        return redirect('ride_detail', ride_id=ride.id)
+    if ride_request.status != '0':
+        messages.error(request, 'Only pending requests can be rejected.')
+        return redirect('ride_detail', ride_id=ride.id)
+    if request.method == 'POST':
+        ride_request.status = '2'  # Rejected
+        ride_request.save()
+        messages.success(request, 'Ride request rejected.')
+        return redirect('ride_detail', ride_id=ride.id)
+    # If GET, show a confirmation page (optional, not implemented here)
+    return redirect('ride_detail', ride_id=ride.id)
 
 # Create your views here.
 # class PostList(generic.ListView):
