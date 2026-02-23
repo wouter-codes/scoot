@@ -7,14 +7,18 @@
             <h5 class="mb-3">
                 {% if user.is_authenticated and ride.driver == user %}
                     <a href="{% url 'my_rides' %}" class="text-decoration-none">&larr; Back to my rides</a>
-                {% else %}
+                {% elif ride_request %}
                     <a href="{% url 'my_ride_requests' %}" class="text-decoration-none">&larr; See all requested rides</a>
+                {% else %}
+                    <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
                 {% endif %}
             </h5>
             {% if ride_request %}
             <h1 class="mb-4">Ride Request Details</h1>
             {% elif user.is_authenticated and ride.driver == user %}
             <h1 class="mb-4">My Ride Details</h1>
+            {% else %}
+            <h1 class="mb-4">Ride Details</h1>
             {% endif %}
             <div class="card mb-4">
                 <div class="card-body">
@@ -25,7 +29,7 @@
                         {% if ride_request %}
                         <small class="text-muted">Seats are only reserved after a request is approved by the driver.</small><br>
                         {% endif %}
-                        {% if ride_request %}
+                        {% if ride.driver != user %}
                         <strong>Driver:</strong> {{ ride.driver.get_full_name|default:ride.driver.username }}<br>
                         {% endif %}
                         {% if ride.pickup_notes %}
@@ -97,9 +101,7 @@
                                 <button type="button" class="btn btn-danger btn-sm disabled">Cancel</button>
                             {% endif %}
                             {% else %}
-                                {% if user.is_authenticated %}
                                     <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn ms-auto">Hop On</a>
-                                {% endif %}
                             {% endif %}
                         </div>
                 </div>

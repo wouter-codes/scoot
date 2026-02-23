@@ -22,22 +22,20 @@ def search_rides(request):
     # Apply search filters from form (must be called on manager)
     rides = rides.apply_search_filters(form)
 
-    # Exclude rides created by the logged-in user
+
+    # Exclude rides created by the logged-in user and rides already requested by the user
     if request.user.is_authenticated:
-        rides = rides.exclude(driver=request.user)
+        # Get ride IDs the user has already requested
+        user_requests = RideRequest.objects.filter(
+            passenger=request.user
+        ).values_list('ride_id', flat=True)
+        user_request_ids = set(user_requests)
+        rides = rides.exclude(driver=request.user).exclude(id__in=user_request_ids)
+    else:
+        user_request_ids = set()
 
     # Order by date
     rides = rides.order_by('date')
-
-    # Add user's existing requests to each ride for template logic
-    if request.user.is_authenticated:
-        user_requests = RideRequest.objects.filter(
-            passenger=request.user,
-            ride__in=rides
-        ).values_list('ride_id', flat=True)
-        user_request_ids = set(user_requests)
-    else:
-        user_request_ids = set()
 
     context = {
         'form': form,

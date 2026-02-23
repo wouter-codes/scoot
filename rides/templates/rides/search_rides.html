@@ -33,9 +33,7 @@
                                     </a>
                                     <div class="card-footer d-flex justify-content-center">
                                         {% if user.is_authenticated %}
-                                            {% if ride.id in user_request_ids %}
-                                                <button class="btn btn-warning ride-btn" disabled>Requested</button>
-                                            {% else %}
+                                            {% if ride.id not in user_request_ids %}
                                                 <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn">Hop On</a>
                                             {% endif %}
                                         {% else %}
