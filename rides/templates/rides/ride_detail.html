@@ -31,40 +31,36 @@
                         {% if ride.pickup_notes %}
                         <strong>Pickup Notes:</strong> {{ ride.pickup_notes }}<br>
                         {% endif %}
-                        {% if ride_request %}
-                            <strong>Status:</strong>
-                            {% if ride_request.status == '0' %}
-                                <span class="badge bg-warning">Pending</span>
-                            {% elif ride_request.status == '1' %}
-                                <span class="badge bg-success">Accepted</span>
-                            {% elif ride_request.status == '2' %}
-                                <span class="badge bg-danger">Rejected</span>
-                            {% elif ride_request.status == '3' %}
-                                <span class="badge bg-secondary">Cancelled by passenger</span>
-                            {% elif ride_request.status == '4' %}
-                                <span class="badge bg-info">Completed</span>
-                            {% elif ride_request.status == '5' %}
-                                <span class="badge bg-secondary">Cancelled by driver</span>
-                            {% endif %}
-                        {% elif user.is_authenticated and ride.driver == user %}
-                            <strong>Status:</strong><span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
-                                {{ ride.get_status_display }}
-                            </span>
-                        {% else %}
-                        {% endif %}
                     </p>
                 </div>
-                <div class="card-footer d-flex justify-content-end gap-2">
+                <div class="card-footer d-flex justify-content-between align-items-center gap-2">
                     {% if user.is_authenticated and ride.driver == user %}
-                        <!-- Edit button -->
-                        <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
-                        <!-- Delete button -->
-                        <button type="button" class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#rideModal"
-                            data-delete-url="{% url 'delete_ride' ride.id %}">
-                            Delete
-                        </button>
+                        <div>
+                            <strong>Status: </strong>
+                            <span class="badge status-badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                {{ ride.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <!-- Edit button -->
+                            <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <!-- Delete/Cancel button -->
+                            {% if has_accepted_requests %}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#rideModal"
+                                    data-delete-url="{% url 'delete_ride' ride.id %}">
+                                    Cancel
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#rideModal"
+                                    data-delete-url="{% url 'delete_ride' ride.id %}">
+                                    Delete
+                                </button>
+                            {% endif %}
+                        </div>
                         <!-- Save as Draft and Publish buttons (if needed) -->
                         <!-- Example: -->
                         <!-- <form method="post" action=""> -->
@@ -73,15 +69,39 @@
                         <!--     <button type="submit" name="publish" class="btn btn-success btn-sm">Publish</button> -->
                         <!-- </form> -->
                     {% elif ride_request %}
-                        {% if ride_request.status == '0' or ride_request.status == '1' and ride_request.id %}
-                            <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                        {% endif %}
-                    {% else %}
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn">Hop On</a>
-                        {% endif %}
-                    {% endif %}
+                        <div>
+                            <strong>Status: </strong>
+                                <span class="badge status-badge
+                                    {% if ride_request.status == '0' %}bg-warning text-dark
+                                    {% elif ride_request.status == '1' %}bg-success
+                                    {% elif ride_request.status == '2' %}bg-danger
+                                    {% elif ride_request.status == '3' %}bg-secondary
+                                    {% elif ride_request.status == '4' %}bg-info
+                                    {% elif ride_request.status == '5' %}bg-secondary
+                                    {% endif %}">
+                                    {% if ride_request.status == '0' %}Pending
+                                    {% elif ride_request.status == '1' %}Accepted
+                                    {% elif ride_request.status == '2' %}Declined
+                                    {% elif ride_request.status == '3' %}Cancelled by passenger
+                                    {% elif ride_request.status == '4' %}Completed
+                                    {% elif ride_request.status == '5' %}Cancelled by driver
+                                    {% endif %}
+                                </span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            {% if ride_request.status == '0' or ride_request.status == '1' %}
+                                <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">{% if ride_request.status == '0' %}Delete{% else %}Cancel{% endif %}</button>
+                            {% else %}
+                                <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
+                                <button type="button" class="btn btn-danger btn-sm disabled">Cancel</button>
+                            {% endif %}
+                            {% else %}
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn ms-auto">Hop On</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
                 </div>
             </div>
             {% if user.is_authenticated and ride.driver == user and ride_requests %}

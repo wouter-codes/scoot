@@ -64,10 +64,12 @@ def ride_detail(request, ride_id):
         # If user is driver, show all requests for this ride
         if request.user == ride.driver:
             ride_requests = RideRequest.objects.filter(ride=ride)
+    has_accepted_requests = ride.ride_requests.filter(status='1').exists()
     return render(request, 'rides/ride_detail.html', {
         'ride': ride,
         'ride_request': ride_request,
-        'ride_requests': ride_requests
+        'ride_requests': ride_requests,
+        'has_accepted_requests': has_accepted_requests,
     })
 
 def request_ride(request, ride_id):

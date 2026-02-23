@@ -21,31 +21,45 @@
                                         <strong>Date & Time:</strong> {{ ride_request.ride.date|date:"d M Y, H:i" }}<br>
                                         <strong>Seats Requested:</strong> {{ ride_request.seats_requested }}<br>
                                         <strong>Driver:</strong> {{ ride_request.ride.driver.get_full_name|default:ride_request.ride.driver.username }}<br>
-                                        <span><strong>Status:</strong></span>
-                                        {% if ride_request.status == '0' %}
-                                            <span class="badge bg-warning">Pending</span>
-                                        {% elif ride_request.status == '1' %}
-                                            <span class="badge bg-success">Accepted</span>
-                                        {% elif ride_request.status == '2' %}
-                                            <span class="badge bg-danger">Declined</span>
-                                        {% endif %}<br>
+                                        <!-- Status moved to footer for consistent styling -->
                                         {% if ride_request.ride.pickup_notes %}
                                         <strong>Pickup Notes:</strong> {{ ride_request.ride.pickup_notes }}<br>
                                         {% endif %}
                                     </p>
                                 </div>
                             </a>
-                            <div class="card-footer d-flex justify-content-end align-items-center">
-                                {% if ride_request.status == '0' %}
-                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Delete</button>
-                                {% elif ride_request.status == '1' and ride_request.id %}
-                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                {% else %}
-                                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
-                                    <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
-                                {% endif %}
+                            <div class="card-footer d-flex justify-content-between align-items-center gap-2">
+                                <div>
+                                    <strong>Status: </strong>
+                                    <span class="badge status-badge
+                                        {% if ride_request.status == '0' %}bg-warning text-dark
+                                        {% elif ride_request.status == '1' %}bg-success
+                                        {% elif ride_request.status == '2' %}bg-danger
+                                        {% elif ride_request.status == '3' %}bg-secondary
+                                        {% elif ride_request.status == '4' %}bg-info
+                                        {% elif ride_request.status == '5' %}bg-secondary
+                                        {% endif %}">
+                                        {% if ride_request.status == '0' %}Pending
+                                        {% elif ride_request.status == '1' %}Accepted
+                                        {% elif ride_request.status == '2' %}Declined
+                                        {% elif ride_request.status == '3' %}Cancelled by passenger
+                                        {% elif ride_request.status == '4' %}Completed
+                                        {% elif ride_request.status == '5' %}Cancelled by driver
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    {% if ride_request.status == '0' %}
+                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Delete</button>
+                                    {% elif ride_request.status == '1' and ride_request.id %}
+                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                                    {% else %}
+                                        <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

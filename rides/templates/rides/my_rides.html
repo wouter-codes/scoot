@@ -20,7 +20,7 @@
                                     <p class="card-text">
                                         <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
                                         <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
-                                        <strong>Requests awaiting approval:</strong> <span class="badge bg-warning text-dark">{% if ride.request_count %}{{ ride.request_count }}{% else %}0{% endif %}</span><br>
+                                        <strong>Requests awaiting approval:</strong> <span class="badge {% if ride.request_count %} text-dark bg-warning"> {{ ride.request_count }}{% else %} text-light bg-secondary"> None{% endif %}</span><br>
                                     </p>
                                     {% if ride.pickup_notes %}
                                     <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
@@ -28,6 +28,7 @@
                                 </div>
                                 <div class="card-footer d-flex justify-content-between align-items-center gap-2">
                                     <div>
+                                        <strong class="text-dark">Status: </strong>
                                         <span class="badge status-badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
                                             {{ ride.get_status_display }}
                                         </span>
