@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.utils.html import mark_safe
 from django.urls import reverse
-from .models import Rides, RideRequest, UserProfile
+from .models import Rides, RideRequest
 from .forms import RideSearchForm, RideCreateForm, RideRequestEditForm
 
 def search_rides(request):
