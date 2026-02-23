@@ -19,11 +19,12 @@
                                     <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
                                     <p class="card-text">
                                         <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
-                                        <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
                                         <strong>Status:</strong> 
                                         <span class="badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
                                             {{ ride.get_status_display }}
-                                        </span>
+                                        </span><br>
+                                        <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
+                                        <strong>Requests awaiting approval:</strong> <span class="badge bg-warning text-dark">{% if ride.request_count %}{{ ride.request_count }}{% else %}0{% endif %}</span><br>
                                     </p>
                                     {% if ride.pickup_notes %}
                                     <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>

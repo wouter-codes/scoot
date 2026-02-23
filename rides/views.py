@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Count, Q
 from django.utils.html import mark_safe
 from django.urls import reverse
 from .models import Rides, RideRequest, UserProfile
@@ -49,16 +50,25 @@ def search_rides(request):
 def my_rides(request):
     """Display all rides created by the logged-in user."""
     rides = Rides.objects.filter(driver=request.user).order_by('-date')
-    
+    # Annotate each ride with count of only pending requests
+    rides = rides.annotate(request_count=Count('ride_requests', filter=Q(ride_requests__status='0')))
     return render(request, 'rides/my_rides.html', {'rides': rides})
 
 def ride_detail(request, ride_id):
     """Display full details for a single ride."""
     ride = get_object_or_404(Rides, id=ride_id)
     ride_request = None
+    ride_requests = None
     if request.user.is_authenticated:
         ride_request = RideRequest.objects.filter(ride=ride, passenger=request.user).first()
-    return render(request, 'rides/ride_detail.html', {'ride': ride, 'ride_request': ride_request})
+        # If user is driver, show all requests for this ride
+        if request.user == ride.driver:
+            ride_requests = RideRequest.objects.filter(ride=ride)
+    return render(request, 'rides/ride_detail.html', {
+        'ride': ride,
+        'ride_request': ride_request,
+        'ride_requests': ride_requests
+    })
 
 def request_ride(request, ride_id):
     """
