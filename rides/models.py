@@ -95,20 +95,21 @@ class RideRequest(models.Model):
 
     def __str__(self):
         return f"Ride ID:{self.ride.id} | RideRequest by {self.passenger.username} for ride from {self.ride.origin} to {self.ride.destination} - Status: {self.get_status_display()}"
-    
-class UserProfile(models.Model):
-    """
-    Stores additional user information related to :model:'auth.User'.
-    """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    location = models.CharField(max_length=255, blank=True)
-    bio = models.TextField(blank=True)
-    profile_picture = CloudinaryField('image', default='placeholder')
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['user__last_name', 'user__first_name']  # Last name, then first name
+# MODAL FOR FUTURE IMPLEMENTATION OF USER PROFILES
+# class UserProfile(models.Model):
+#     """
+#     Stores additional user information related to :model:'auth.User'.
+#     """
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+#     location = models.CharField(max_length=255, blank=True)
+#     bio = models.TextField(blank=True)
+#     profile_picture = CloudinaryField('image', default='placeholder')
+#     created_on = models.DateTimeField(auto_now_add=True)
+#     updated_on = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"Profile of {self.user.first_name} {self.user.last_name}"
+#     class Meta:
+#         ordering = ['user__last_name', 'user__first_name']  # Last name, then first name
+
+#     def __str__(self):
+#         return f"Profile of {self.user.first_name} {self.user.last_name}"
