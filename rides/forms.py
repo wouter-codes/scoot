@@ -78,12 +78,10 @@ class RideCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         # Set initial date to now if not provided
         if not self.fields['date'].initial:
             today = datetime.date.today()
             self.fields['date'].initial = today
-            
         # Set placeholders
         self.fields['origin'].widget.attrs['placeholder'] = 'e.g. Truro'
         self.fields['destination'].widget.attrs['placeholder'] = 'e.g. Falmouth'
@@ -101,22 +99,46 @@ class RideCreateForm(forms.ModelForm):
         labels = {
             'origin': 'Pick Up',
             'destination': 'Drop Off',
+            'date': 'Date & Departure Time',
             'seats_available': 'Available Seats',
             'pickup_notes': 'Pickup Notes',
         }
 
-class RideRequestEditForm(forms.ModelForm):
-    """Form for editing a ride request (seats_requested)."""
-    seats_requested = forms.IntegerField(
-        min_value=1,
-        max_value=4,
+class RideRequestForm(forms.ModelForm):
+    """Form for submitting a new ride request (number of seats)."""
+    seats_requested = forms.ChoiceField(
         label='Seats Requested',
-        help_text='You can request up to 4 seats.'
+        help_text='Select the number of seats you want to request.'
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, max_seats=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['seats_requested'].widget.attrs['placeholder'] = 'Number of seats'
+        # Default to 4 if not provided
+        max_seats = max_seats or 4
+        self.fields['seats_requested'].choices = [
+            (str(i), str(i)) for i in range(1, max_seats + 1)
+        ]
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+
+    class Meta:
+        model = RideRequest
+        fields = ['seats_requested']
+
+class RideRequestEditForm(forms.ModelForm):
+    """Form for editing a ride request (seats_requested)."""
+    seats_requested = forms.ChoiceField(
+        label='Seats Requested',
+        help_text='Select the number of seats you want to request.'
+    )
+
+    def __init__(self, *args, max_seats=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Default to 4 if not provided
+        max_seats = max_seats or 4
+        self.fields['seats_requested'].choices = [
+            (str(i), str(i)) for i in range(1, max_seats + 1)
+        ]
         self.helper = FormHelper()
         self.helper.form_method = 'post'
 

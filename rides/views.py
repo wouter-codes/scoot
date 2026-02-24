@@ -6,10 +6,14 @@ from django.db.models import Count, Q
 from django.utils.html import mark_safe
 from django.urls import reverse
 from .models import Rides, RideRequest
-from .forms import RideSearchForm, RideCreateForm, RideRequestEditForm
+from .forms import RideSearchForm, RideCreateForm, RideRequestForm, RideRequestEditForm
 
 def search_rides(request):
-    """Render the home page with ride search form"""
+    """
+    Display the home page with the ride search form and filtered ride results.
+    Applies search filters, excludes rides created or already requested by the user,
+    and orders results by date. Only published and available rides are shown.
+    """
     form = RideSearchForm(request.GET or None)
 
     # Start with all published, available rides
@@ -61,7 +65,11 @@ def my_rides(request):
     })
 
 def ride_detail(request, ride_id):
-    """Display full details for a single ride."""
+    """
+    Display full details for a single ride, including ride info and ride requests.
+    If the user is the driver, show all requests for this ride. If the user is a passenger,
+    show their own request if it exists. Indicates if any requests have been accepted.
+    """
     ride = get_object_or_404(Rides, id=ride_id)
     ride_request = None
     ride_requests = None
@@ -80,8 +88,9 @@ def ride_detail(request, ride_id):
 
 def request_ride(request, ride_id):
     """
-    Handle ride request. Users select number of seats and confirm.
-    Redirects to signup if not logged in.
+    Handle ride request submission for a specific ride.
+    Users select number of seats and confirm. Redirects to signup if not logged in.
+    Validates seat availability and creates a pending ride request.
     """
     if not request.user.is_authenticated:
         login_url = reverse('account_login')
@@ -97,38 +106,27 @@ def request_ride(request, ride_id):
         return redirect('search_rides')
     
     if request.method == 'POST':
-        seats_requested = int(request.POST.get('seats_requested', 1))
-        
-        # Validate seats requested
-        if seats_requested < 1 or seats_requested > ride.seats_available:
-            context = {
-                'ride': ride,
-                'error': f'Please select between 1 and {ride.seats_available} seats'
-            }
+        form = RideRequestForm(request.POST, max_seats=ride.seats_available)
+        if form.is_valid():
+            ride_request = form.save(commit=False)
+            ride_request.passenger = request.user
+            ride_request.ride = ride
+            ride_request.status = '0'  # Pending status
+            ride_request.save()
+            return redirect('ride_request_confirmation', request_id=ride_request.id)
+        else:
+            context = {'ride': ride, 'form': form}
             return render(request, 'rides/request_ride.html', context)
-        
-        # Create the ride request
-        ride_request = RideRequest.objects.create(
-            passenger=request.user,
-            ride=ride,
-            seats_requested=seats_requested,
-            status='0'  # Pending status
-        )
-        
-        # Do not decrement available seats here; seats will be deducted only when request is approved
-        
-        # Redirect to confirmation page
-        return redirect('ride_request_confirmation', request_id=ride_request.id)
-    
-    context = {
-        'ride': ride,
-    }
+    else:
+        form = RideRequestForm(max_seats=ride.seats_available)
+    context = {'ride': ride, 'form': form}
     return render(request, 'rides/request_ride.html', context)
 
 @login_required(login_url='account_signup')
 def ride_request_confirmation(request, request_id):
     """
-    Display booking confirmation page after successful booking.
+    Display booking confirmation page after a successful ride request submission.
+    Only accessible to the passenger who made the request.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
     
@@ -139,7 +137,10 @@ def ride_request_confirmation(request, request_id):
 
 @login_required(login_url='account_signup')
 def create_ride(request):
-    """Allow logged-in users to create a new ride listing."""
+    """
+    Allow logged-in users to create a new ride listing.
+    Handles both publishing and saving as draft, depending on which button is pressed.
+    """
     if request.method == 'POST':
         form = RideCreateForm(request.POST)
         if form.is_valid():
@@ -160,32 +161,39 @@ def create_ride(request):
                 ride.save()
                 messages.info(request, 'Your ride has been saved as a draft.')
             return redirect('my_rides')
+        else:
+            messages.error(request, 'Please correct the errors below to create your ride.')
     else:
         form = RideCreateForm()
-    
     return render(request, 'rides/create_ride.html', {'form': form})
 
 @login_required(login_url='account_signup')
 def edit_ride(request, ride_id):
-    """Allow ride creator to edit their ride listing."""
+    """
+    Allow the ride creator to edit their ride listing.
+    Only the driver can edit. Prevents saving as draft if there are ride requests.
+    """
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
         form = RideCreateForm(request.POST or None, instance=ride)
-        if request.method == 'POST' and form.is_valid():
-            ride = form.save(commit=False)
-            if request.POST.get('publish') == '1':
-                ride.status = '1'  # Published
-                ride.save()
-                messages.success(request, 'Ride published successfully!')
-                return redirect('my_rides')
-            elif request.POST.get('publish') == '0':
-                if ride.ride_requests.exists():
-                    messages.error(request, 'You cannot save this ride as a draft because there are ride requests for it.')
-                    return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
-                ride.status = '0'  # Draft
-                ride.save()
-                messages.info(request, 'Ride saved as draft.')
-                return redirect('my_rides')
+        if request.method == 'POST':
+            if form.is_valid():
+                ride = form.save(commit=False)
+                if request.POST.get('publish') == '1':
+                    ride.status = '1'  # Published
+                    ride.save()
+                    messages.success(request, 'Ride published successfully!')
+                    return redirect('my_rides')
+                elif request.POST.get('publish') == '0':
+                    if ride.ride_requests.exists():
+                        messages.error(request, 'You cannot save this ride as a draft because there are ride requests for it.')
+                        return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
+                    ride.status = '0'  # Draft
+                    ride.save()
+                    messages.info(request, 'Ride saved as draft.')
+                    return redirect('my_rides')
+            else:
+                messages.error(request, 'Please correct the errors below to update your ride.')
         return render(request, 'rides/edit_ride.html', {'form': form, 'ride': ride})
     else:
         messages.add_message(request, messages.ERROR, 'You can only edit your own rides!')
@@ -193,7 +201,10 @@ def edit_ride(request, ride_id):
     
 @login_required(login_url='account_signup')
 def delete_ride(request, ride_id):
-    """Allow ride creator to delete their ride listing, or cancel if accepted requests exist."""
+    """
+    Allow the ride creator to delete their ride listing, or cancel if accepted requests exist.
+    If there are accepted requests, cancels the ride and notifies passengers instead of deleting.
+    """
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
         # Check for accepted ride requests
@@ -215,7 +226,8 @@ def delete_ride(request, ride_id):
 @login_required(login_url='account_signup')
 def my_ride_requests(request):
     """
-    Display all ride requests (bookings) for the logged-in user.
+    Display all ride requests (bookings) for the logged-in user, grouped by status.
+    Shows accepted, pending, and voided (cancelled/rejected) requests.
     """
     all_requests = RideRequest.objects.filter(
         passenger=request.user
@@ -235,13 +247,15 @@ def my_ride_requests(request):
 @login_required(login_url='account_signup')
 def edit_ride_request(request, request_id):
     """
-    Allow passenger to edit their ride request (increase seat number).
+    Allow passenger to edit their ride request (change seat number).
+    Validates seat availability and updates both the ride and the request accordingly.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
     ride = ride_request.ride
     old_seats = ride_request.seats_requested
+    max_allowed = ride.seats_available + old_seats
     if request.method == 'POST':
-        form = RideRequestEditForm(request.POST, instance=ride_request)
+        form = RideRequestEditForm(request.POST, instance=ride_request, max_seats=max_allowed)
         if form.is_valid():
             new_seats = form.cleaned_data['seats_requested']
             max_allowed = ride.seats_available + old_seats
@@ -262,13 +276,15 @@ def edit_ride_request(request, request_id):
                 messages.success(request, f'Requested seat number updated to {new_seats}.')
             return redirect('my_ride_requests')
     else:
-        form = RideRequestEditForm(instance=ride_request)
+        form = RideRequestEditForm(instance=ride_request, max_seats=max_allowed)
     return render(request, 'rides/edit_ride_request.html', {'form': form, 'ride_request': ride_request})
 
 @login_required(login_url='account_signup')
 def cancel_ride_request(request, request_id):
     """
-    Allow passenger or driver to cancel a ride request, restore seats if approved, and show confirmation.
+    Allow passenger or driver to cancel a ride request.
+    Restores seats if the request was approved. Handles both pending and approved requests.
+    Only the passenger or the driver can perform this action.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id)
     ride = ride_request.ride
@@ -309,7 +325,8 @@ def cancel_ride_request(request, request_id):
 @login_required(login_url='account_signup')
 def approve_ride_request(request, request_id):
     """
-    Allow driver to approve a pending ride request and deduct seats.
+    Allow the driver to approve a pending ride request and deduct seats from the ride.
+    Only the driver can approve, and only if enough seats are available.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id)
     ride = ride_request.ride
@@ -333,7 +350,8 @@ def approve_ride_request(request, request_id):
 @login_required(login_url='account_signup')
 def reject_ride_request(request, request_id):
     """
-    Allow driver to reject a pending ride request.
+    Allow the driver to reject a pending ride request.
+    Only the driver can reject, and only if the request is still pending.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id)
     ride = ride_request.ride

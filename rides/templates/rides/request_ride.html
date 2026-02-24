@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
 <div class="container my-5">
     <div class="row">
         <div class="col-12 col-md-8 col-lg-6 mx-auto">
@@ -20,31 +22,25 @@
                 </div>
             </div>
 
-            <!-- Booking Form -->
-            {% if error %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-            {% endif %}
-
-            <form method="post" class="card p-4">
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label for="seats_requested" class="form-label">How many seats do you need?</label>
-                    <select class="form-select" id="seats_requested" name="seats_requested" required>
-                        <option value="">-- Select number of seats --</option>
-                        {% for i in "x"|rjust:ride.seats_available %}
-                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-                    <a href="{% url 'search_rides' %}" class="btn btn-outline-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Request Ride</button>
-                </div>
-            </form>
+                        <!-- Booking Form -->
+                        <form method="post" class="card p-4">
+                                {% csrf_token %}
+                                {% if form.non_field_errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ form.non_field_errors|join:"<br>"|safe }}
+                                    </div>
+                                {% endif %}
+                                <div class="mb-3">
+                                    {{ form.seats_requested|as_crispy_field }}
+                                    {% if form.seats_requested.errors %}
+                                        <div class="text-danger small">{{ form.seats_requested.errors|join:"<br>"|safe }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                    <a href="{% url 'search_rides' %}" class="btn btn-outline-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Request Ride</button>
+                                </div>
+                        </form>
         </div>
     </div>
 </div>
