@@ -22,13 +22,22 @@
                 <div class="d-flex gap-2">
                     <!-- Edit button -->
                     <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm">Edit</a>
-                    <!-- Delete button -->
-                    <button type="button" class="btn btn-danger btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#rideModal"
-                        data-delete-url="{% url 'delete_ride' ride.id %}">
-                        Delete
-                    </button>
+                    <!-- Delete/Cancel button -->
+                    {% if ride.request_count or ride.status == '1' %}
+                        <button type="button" class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#rideModal"
+                            data-delete-url="{% url 'delete_ride' ride.id %}">
+                            Cancel
+                        </button>
+                    {% else %}
+                        <button type="button" class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#rideModal"
+                            data-delete-url="{% url 'delete_ride' ride.id %}">
+                            Delete
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </div>

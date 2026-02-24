@@ -78,12 +78,10 @@ def ride_detail(request, ride_id):
         # If user is driver, show all requests for this ride
         if request.user == ride.driver:
             ride_requests = RideRequest.objects.filter(ride=ride)
-    has_accepted_requests = ride.ride_requests.filter(status='1').exists()
     return render(request, 'rides/ride_detail.html', {
         'ride': ride,
         'ride_request': ride_request,
         'ride_requests': ride_requests,
-        'has_accepted_requests': has_accepted_requests,
     })
 
 def request_ride(request, ride_id):
@@ -207,15 +205,15 @@ def delete_ride(request, ride_id):
     """
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
-        # Check for accepted ride requests
-        accepted_requests = ride.ride_requests.filter(status='1')
-        if accepted_requests.exists():
+        # Check for pending or accepted ride requests
+        related_requests = ride.ride_requests.filter(status__in=['0', '1'])
+        if related_requests.exists():
             # Cancel the ride instead of deleting
             ride.status = '2'  # Cancelled
             ride.save()
-            # Update accepted requests to 'Cancelled by driver'
-            accepted_requests.update(status='5')
-            messages.add_message(request, messages.WARNING, 'Ride cancelled because there were accepted ride requests. Passengers have been notified.')
+            # Update pending and accepted requests to 'Cancelled by driver'
+            related_requests.update(status='5')
+            messages.add_message(request, messages.WARNING, 'Ride cancelled. Passengers with ride requests have been notified.')
         else:
             ride.delete()
             messages.add_message(request, messages.SUCCESS, 'Ride deleted successfully!')
