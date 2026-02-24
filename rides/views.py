@@ -205,18 +205,17 @@ def delete_ride(request, ride_id):
     """
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
-        # Check for pending or accepted ride requests
-        related_requests = ride.ride_requests.filter(status__in=['0', '1'])
-        if related_requests.exists():
-            # Cancel the ride instead of deleting
+        if ride.status == '1':  # Published
             ride.status = '2'  # Cancelled
             ride.save()
-            # Update pending and accepted requests to 'Cancelled by driver'
-            related_requests.update(status='5')
+            # Update all pending and accepted requests to 'Cancelled by driver'
+            ride.ride_requests.filter(status__in=['0', '1']).update(status='5')
             messages.add_message(request, messages.WARNING, 'Ride cancelled. Passengers with ride requests have been notified.')
-        else:
+        elif ride.status == '0':  # Draft
             ride.delete()
             messages.add_message(request, messages.SUCCESS, 'Ride deleted successfully!')
+        else:
+            messages.add_message(request, messages.INFO, 'This ride cannot be deleted or cancelled.')
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own rides!')
     return redirect('my_rides')

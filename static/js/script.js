@@ -80,9 +80,13 @@ function handleRideModal() {
                 confirmBtn.textContent = "Yes, delete";
             } else {
                 modalTitle.textContent = "Confirm Cancellation";
-                modalBody.innerHTML = `<p>Are you sure you want to cancel this ride? 
-                    If cancelled:</p> <ul><li>All passengers with existing ride requests will be notified</li>
-                    <li>Ride will be removed from active listings</li></ul>`;
+                modalBody.innerHTML = `
+                    <p>Are you sure you want to cancel this ride? If cancelled:</p>
+                    <ul>
+                        <li>All passengers with existing ride requests will be notified</li>
+                        <li>Ride will be removed from active listings</li>
+                    </ul>
+                `;
                 confirmBtn.textContent = "Yes, cancel";
             }
         }
