@@ -53,7 +53,6 @@ class RideSearchForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'})
         }
 
-
 class RideCreateForm(forms.ModelForm):
     """Form for creating a new ride listing."""
     def clean_origin(self):
@@ -68,12 +67,21 @@ class RideCreateForm(forms.ModelForm):
             raise forms.ValidationError('Destination must be at least 3 characters.')
         return destination    
     
-    seats_available = forms.IntegerField(
-        min_value=1,
-        max_value=4,
-        error_messages={'min_value': 'You must offer at least 1 seat.'},
-        label='Available Seats'
-    )
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if not date:
+            raise forms.ValidationError('Please select a date and departure time.')
+        return date
+
+    def clean_seats_available(self):
+        seats = self.cleaned_data.get('seats_available')
+        if seats is None:
+            raise forms.ValidationError('Please specify the number of available seats.')
+        if seats < 1:
+            raise forms.ValidationError('You must offer at least 1 seat.')
+        if seats > 4:
+            raise forms.ValidationError('You can offer a maximum of 4 seats.')
+        return seats
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

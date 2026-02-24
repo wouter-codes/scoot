@@ -40,11 +40,7 @@
                     <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2" aria-label="Edit ride request">Edit</a>
                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Delete ride request">Delete</button>
                 {% elif ride_request.status == '1' and ride_request.id %}
-                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2" aria-label="Edit ride request">Edit</a>
                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Cancel ride request">Cancel</button>
-                {% else %}
-                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled" aria-label="Edit ride request (disabled)">Edit</a>
-                    <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Cancel ride request (disabled)">Cancel</button>
                 {% endif %}
             </div>
         </div>

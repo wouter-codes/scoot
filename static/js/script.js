@@ -39,12 +39,12 @@ function handleRideRequestModal() {
             if (actionText === "Delete") {
                 modalTitle.textContent = "Confirm Delete";
                 modalBody.textContent =
-                    "Are you sure you want to delete this ride request?";
+                    "Are you sure you want to delete this ride request? This action can't be undone.";
                 confirmBtn.textContent = "Yes, delete";
             } else {
                 modalTitle.textContent = "Confirm Cancellation";
                 modalBody.textContent =
-                    "Are you sure you want to cancel this ride request?";
+                    "Are you sure you want to cancel this ride request? This action can't be undone.";
                 confirmBtn.textContent = "Yes, cancel";
             }
         }
@@ -70,12 +70,12 @@ function handleRideModal() {
             if (actionText === "Delete") {
                 modalTitle.textContent = "Confirm Delete";
                 modalBody.textContent =
-                    "Are you sure you want to delete this ride?";
+                    "Are you sure you want to delete this ride? This action can't be undone.";
                 confirmBtn.textContent = "Yes, delete";
             } else {
                 modalTitle.textContent = "Confirm Cancellation";
                 modalBody.innerHTML = `
-                    <p>Are you sure you want to cancel this ride? If cancelled:</p>
+                    <p>Are you sure you want to cancel this ride? This action can't be undone. If cancelled:</p>
                     <ul>
                         <li>All passengers with existing ride requests will be notified</li>
                         <li>Ride will be removed from active listings</li>

@@ -1,3 +1,4 @@
+/* global document */
 // Add hover effect to clickable ride cards
 document.addEventListener("DOMContentLoaded", function () {
     const cardLinks = document.querySelectorAll(".card-link-wrapper");
@@ -14,13 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
             card.classList.remove("shadow-lg", "card-hover");
         });
     });
-});
-
-// JavaScript to handle the delete confirmation modal
-
-document.addEventListener("DOMContentLoaded", function () {
-    handleRideModal();
-    handleRideRequestModal();
 });
 
 function handleRideRequestModal() {
@@ -45,12 +39,12 @@ function handleRideRequestModal() {
             if (actionText === "Delete") {
                 modalTitle.textContent = "Confirm Delete";
                 modalBody.textContent =
-                    "Are you sure you want to delete this ride request?";
+                    "Are you sure you want to delete this ride request? This action can't be undone.";
                 confirmBtn.textContent = "Yes, delete";
             } else {
                 modalTitle.textContent = "Confirm Cancellation";
                 modalBody.textContent =
-                    "Are you sure you want to cancel this ride request?";
+                    "Are you sure you want to cancel this ride request? This action can't be undone.";
                 confirmBtn.textContent = "Yes, cancel";
             }
         }
@@ -76,12 +70,12 @@ function handleRideModal() {
             if (actionText === "Delete") {
                 modalTitle.textContent = "Confirm Delete";
                 modalBody.textContent =
-                    "Are you sure you want to delete this ride?";
+                    "Are you sure you want to delete this ride? This action can't be undone.";
                 confirmBtn.textContent = "Yes, delete";
             } else {
                 modalTitle.textContent = "Confirm Cancellation";
                 modalBody.innerHTML = `
-                    <p>Are you sure you want to cancel this ride? If cancelled:</p>
+                    <p>Are you sure you want to cancel this ride? This action can't be undone. If cancelled:</p>
                     <ul>
                         <li>All passengers with existing ride requests will be notified</li>
                         <li>Ride will be removed from active listings</li>
@@ -92,6 +86,11 @@ function handleRideModal() {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    handleRideModal();
+    handleRideRequestModal();
+});
 
 // Handle publish modal for edit ride form
 document.addEventListener("DOMContentLoaded", function () {
@@ -117,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const saveDraftBtn = document.getElementById("saveDraftBtn");
         if (saveDraftBtn) {
             saveDraftBtn.addEventListener("click", function (e) {
+                e.preventDefault();
                 publishHiddenInput.value = "0";
                 rideForm.submit();
             });

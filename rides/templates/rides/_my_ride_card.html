@@ -22,7 +22,9 @@
             </div>
             <div class="d-flex gap-2">
                 <!-- Edit button -->
+                {% if ride.status != '2' %}
                 <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm" aria-label="Edit ride">Edit</a>
+                {% endif %}
                 <!-- Delete/Cancel button -->
                 {% if ride.request_count or ride.status == '1' %}
                     <button type="button" class="btn btn-danger btn-sm"
