@@ -1,6 +1,7 @@
+{# Partial template for displaying a single ride request card in lists (used in my_ride_requests.html) #}
 <div class="col-12 col-md-6 col-xl-4 mb-4">
     <div class="card h-100">
-        <a href="{% url 'ride_detail' ride_request.ride.id %}" class="text-decoration-none card-link-wrapper">
+        <a href="{% url 'ride_detail' ride_request.ride.id %}" class="text-decoration-none card-link-wrapper" aria-label="View ride details for {{ ride_request.ride.origin }} to {{ ride_request.ride.destination }}">
             <div class="card-body text-dark">
                 <h5 class="card-title">{{ ride_request.ride.origin }} → {{ ride_request.ride.destination }}</h5>
                 <p class="card-text">
@@ -16,6 +17,7 @@
         <div class="card-footer d-flex justify-content-between align-items-center gap-2">
             <div>
                 <strong>Status: </strong>
+                {# Status badge color: yellow for pending, green for accepted, red for declined, grey for cancelled, blue for completed #}
                 <span class="badge status-badge
                     {% if ride_request.status == '0' %}bg-warning text-dark
                     {% elif ride_request.status == '1' %}bg-success
@@ -35,14 +37,14 @@
             </div>
             <div class="d-flex gap-2">
                 {% if ride_request.status == '0' %}
-                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Delete</button>
+                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2" aria-label="Edit ride request">Edit</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Delete ride request">Delete</button>
                 {% elif ride_request.status == '1' and ride_request.id %}
-                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2" aria-label="Edit ride request">Edit</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Cancel ride request">Cancel</button>
                 {% else %}
-                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
-                    <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">Cancel</button>
+                    <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled" aria-label="Edit ride request (disabled)">Edit</a>
+                    <button type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}" aria-label="Cancel ride request (disabled)">Cancel</button>
                 {% endif %}
             </div>
         </div>

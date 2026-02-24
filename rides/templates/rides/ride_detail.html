@@ -53,14 +53,16 @@
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#rideModal"
-                                    data-delete-url="{% url 'delete_ride' ride.id %}">
+                                    data-delete-url="{% url 'delete_ride' ride.id %}"
+                                    aria-label="Cancel this ride (published)">
                                     Cancel
                                 </button>
                             {% else %}
                                 <button type="button" class="btn btn-danger btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#rideModal"
-                                    data-delete-url="{% url 'delete_ride' ride.id %}">
+                                    data-delete-url="{% url 'delete_ride' ride.id %}"
+                                    aria-label="Delete this ride (draft)">
                                     Delete
                                 </button>
                             {% endif %}
@@ -88,7 +90,10 @@
                         <div class="d-flex gap-2">
                             {% if ride_request.status == '0' or ride_request.status == '1' %}
                                 <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}">{% if ride_request.status == '0' %}Delete{% else %}Cancel{% endif %}</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rideRequestModal" data-cancel-url="{% url 'cancel_ride_request' ride_request.id %}"
+                                    aria-label="{% if ride_request.status == '0' %}Delete this ride request{% else %}Cancel this ride request{% endif %}">
+                                    {% if ride_request.status == '0' %}Delete{% else %}Cancel{% endif %}
+                                </button>
                             {% else %}
                                 <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
                                 <button type="button" class="btn btn-danger btn-sm disabled">Cancel</button>
