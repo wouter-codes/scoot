@@ -14,11 +14,11 @@
                 {% endif %}
             </p>
             {% if ride_request %}
-            <h1 class="mb-4">Ride Request Details</h1>
+                <h1 class="mb-4">Ride Request Details</h1>
             {% elif user.is_authenticated and ride.driver == user %}
-            <h1 class="mb-4">My Ride Details</h1>
+                <h1 class="mb-4">My Ride Details</h1>
             {% else %}
-            <h1 class="mb-4">Ride Details</h1>
+                <h1 class="mb-4">Ride Details</h1>
             {% endif %}
             <div class="card mb-4">
                 <div class="card-body">
@@ -98,13 +98,13 @@
                                 <a href="{% url 'edit_ride_request' ride_request.id %}" class="btn btn-warning btn-sm me-2 disabled">Edit</a>
                                 <button type="button" class="btn btn-danger btn-sm disabled">Cancel</button>
                             {% endif %}
-                            {% else %}
-                                    <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn ms-auto">Hop On</a>
-                            {% endif %}
                         </div>
+                    {% else %}
+                        <a href="{% url 'request_ride' ride.id %}" class="btn btn-primary ride-btn ms-auto">Hop On</a>
+                    {% endif %}
                 </div>
-            
-                {% if user.is_authenticated and ride.driver == user and ride_requests %}
+            </div>
+            {% if user.is_authenticated and ride.driver == user and ride_requests %}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
                         <h2 class="passenger-request">Passenger Requests</h2>
@@ -164,7 +164,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
             {% endif %}
         </div>
     </div>

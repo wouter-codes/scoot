@@ -1,49 +1,47 @@
 {# Partial template for displaying a single ride card in ride lists (used in my_rides.html) #}
 <div class="col-12 col-md-6 col-xl-4 mb-4">
-    <a href="{% url 'ride_detail' ride.id %}" class="text-decoration-none card-link-wrapper" aria-label="View ride details for {{ ride.origin }} to {{ ride.destination }}">
-        <div class="card h-100">
-            <div class="card-body text-dark">
-                <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
-                <p class="card-text">
-                    <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
-                    <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
-                    <strong>Requests awaiting approval:</strong> <span class="badge {% if ride.request_count %} text-dark bg-warning"> {{ ride.request_count }}{% else %} text-light bg-secondary"> None{% endif %}</span><br>
-                </p>
-                {% if ride.pickup_notes %}
-                <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
+    <div class="card h-100 card-link-wrapper" role="group">
+        <div class="card-body text-dark" onclick="window.location.href='{% url 'ride_detail' ride.id %}'" style="cursor:pointer" aria-label="View ride details for {{ ride.origin }} to {{ ride.destination }}">
+            <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
+            <p class="card-text">
+                <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
+                <strong>Seats Available:</strong> {{ ride.seats_available }}<br>
+                <strong>Requests awaiting approval:</strong> <span class="badge {% if ride.request_count %} text-dark bg-warning"> {{ ride.request_count }}{% else %} text-light bg-secondary"> None{% endif %}</span><br>
+            </p>
+            {% if ride.pickup_notes %}
+            <p class="card-text"><small class="text-muted">{{ ride.pickup_notes }}</small></p>
+            {% endif %}
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center gap-2">
+            <div>
+                <strong class="text-dark">Status: </strong>
+                {# Status badge color: green for published, grey for draft, red for cancelled/voided #}
+                <span class="badge status-badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
+                    {{ ride.get_status_display }}
+                </span>
+            </div>
+            <div class="d-flex gap-2">
+                <!-- Edit button -->
+                <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm" aria-label="Edit ride">Edit</a>
+                <!-- Delete/Cancel button -->
+                {% if ride.request_count or ride.status == '1' %}
+                    <button type="button" class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#rideModal"
+                        data-delete-url="{% url 'delete_ride' ride.id %}"
+                        aria-label="Cancel ride">
+                        Cancel
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#rideModal"
+                        data-delete-url="{% url 'delete_ride' ride.id %}"
+                        aria-label="Delete ride">
+                        Delete
+                    </button>
                 {% endif %}
             </div>
-            <div class="card-footer d-flex justify-content-between align-items-center gap-2">
-                <div>
-                    <strong class="text-dark">Status: </strong>
-                    {# Status badge color: green for published, grey for draft, red for cancelled/voided #}
-                    <span class="badge status-badge {% if ride.status == '1' %}bg-success{% elif ride.status == '0' %}bg-secondary{% else %}bg-danger{% endif %}">
-                        {{ ride.get_status_display }}
-                    </span>
-                </div>
-                <div class="d-flex gap-2">
-                    <!-- Edit button -->
-                    <a href="{% url 'edit_ride' ride.id %}" class="btn btn-warning btn-sm" aria-label="Edit ride">Edit</a>
-                    <!-- Delete/Cancel button -->
-                    {% if ride.request_count or ride.status == '1' %}
-                        <button type="button" class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#rideModal"
-                            data-delete-url="{% url 'delete_ride' ride.id %}"
-                            aria-label="Cancel ride">
-                            Cancel
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-danger btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#rideModal"
-                            data-delete-url="{% url 'delete_ride' ride.id %}"
-                            aria-label="Delete ride">
-                            Delete
-                        </button>
-                    {% endif %}
-                </div>
-            </div>
         </div>
-    </a>
+    </div>
 </div>
