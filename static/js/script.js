@@ -1,3 +1,4 @@
+/* global document */
 // Add hover effect to clickable ride cards
 document.addEventListener("DOMContentLoaded", function () {
     const cardLinks = document.querySelectorAll(".card-link-wrapper");
@@ -14,13 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
             card.classList.remove("shadow-lg", "card-hover");
         });
     });
-});
-
-// JavaScript to handle the delete confirmation modal
-
-document.addEventListener("DOMContentLoaded", function () {
-    handleRideModal();
-    handleRideRequestModal();
 });
 
 function handleRideRequestModal() {
@@ -93,6 +87,11 @@ function handleRideModal() {
     });
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    handleRideModal();
+    handleRideRequestModal();
+});
+
 // Handle publish modal for edit ride form
 document.addEventListener("DOMContentLoaded", function () {
     const openPublishModalBtn = document.getElementById("openPublishModalBtn");
@@ -117,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const saveDraftBtn = document.getElementById("saveDraftBtn");
         if (saveDraftBtn) {
             saveDraftBtn.addEventListener("click", function (e) {
+                e.preventDefault();
                 publishHiddenInput.value = "0";
                 rideForm.submit();
             });
