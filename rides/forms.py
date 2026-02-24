@@ -1,8 +1,8 @@
 import datetime
 from django import forms
-from .models import Rides, RideRequest
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Row, Column, Layout
+from .models import Rides, RideRequest
 
 class RideSearchForm(forms.ModelForm):
     """Form for searching rides by origin, destination, date, and min passengers."""

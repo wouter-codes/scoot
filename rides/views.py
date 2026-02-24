@@ -5,14 +5,17 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.utils.html import mark_safe
 from django.urls import reverse
+
 from .models import Rides, RideRequest
 from .forms import RideSearchForm, RideCreateForm, RideRequestForm, RideRequestEditForm
+
 
 def search_rides(request):
     """
     Display the home page with the ride search form and filtered ride results.
     Applies search filters, excludes rides created or already requested by the user,
-    and orders results by date. Only published and available rides are shown.
+    and orders results by date.
+    Only published and available rides are shown.
     """
     form = RideSearchForm(request.GET or None)
 
@@ -25,7 +28,6 @@ def search_rides(request):
 
     # Apply search filters from form (must be called on manager)
     rides = rides.apply_search_filters(form)
-
 
     # Exclude rides created by the logged-in user and rides already requested by the user
     if request.user.is_authenticated:
@@ -48,6 +50,7 @@ def search_rides(request):
     }
     return render(request, 'rides/search_rides.html', context)
 
+
 @login_required(login_url='account_signup')
 def my_rides(request):
     """Display all rides created by the logged-in user."""
@@ -63,6 +66,7 @@ def my_rides(request):
         'draft_rides': draft_rides,
         'voided_rides': voided_rides,
     })
+
 
 def ride_detail(request, ride_id):
     """
@@ -84,6 +88,7 @@ def ride_detail(request, ride_id):
         'ride_requests': ride_requests,
     })
 
+
 def request_ride(request, ride_id):
     """
     Handle ride request submission for a specific ride.
@@ -95,14 +100,14 @@ def request_ride(request, ride_id):
         message = f'You need to be logged in to request a ride. Sign up or <a href="{login_url}" class="link">log in</a> to continue.'
         messages.warning(request, mark_safe(message))
         return redirect('account_signup')
-    
+
     ride = get_object_or_404(Rides, id=ride_id)
-    
+
     # Check if ride has available seats
     if ride.seats_available <= 0:
         messages.error(request, 'This ride has no available seats.')
         return redirect('search_rides')
-    
+
     if request.method == 'POST':
         form = RideRequestForm(request.POST, max_seats=ride.seats_available)
         if form.is_valid():
@@ -120,6 +125,7 @@ def request_ride(request, ride_id):
     context = {'ride': ride, 'form': form}
     return render(request, 'rides/request_ride.html', context)
 
+
 @login_required(login_url='account_signup')
 def ride_request_confirmation(request, request_id):
     """
@@ -127,11 +133,12 @@ def ride_request_confirmation(request, request_id):
     Only accessible to the passenger who made the request.
     """
     ride_request = get_object_or_404(RideRequest, id=request_id, passenger=request.user)
-    
+
     context = {
         'ride_request': ride_request,
     }
     return render(request, 'rides/ride_request_confirmation.html', context)
+
 
 @login_required(login_url='account_signup')
 def create_ride(request):
@@ -165,6 +172,7 @@ def create_ride(request):
         form = RideCreateForm()
     return render(request, 'rides/create_ride.html', {'form': form})
 
+
 @login_required(login_url='account_signup')
 def edit_ride(request, ride_id):
     """
@@ -196,7 +204,8 @@ def edit_ride(request, ride_id):
     else:
         messages.add_message(request, messages.ERROR, 'You can only edit your own rides!')
         return redirect('my_rides')
-    
+
+
 @login_required(login_url='account_signup')
 def delete_ride(request, ride_id):
     """
@@ -221,6 +230,7 @@ def delete_ride(request, ride_id):
         messages.add_message(request, messages.ERROR, 'You can only delete your own rides!')
     return redirect('my_rides')
 
+
 @login_required(login_url='account_signup')
 def my_ride_requests(request):
     """
@@ -241,6 +251,7 @@ def my_ride_requests(request):
         'voided_requests': voided_requests,
     }
     return render(request, 'rides/my_ride_requests.html', context)
+
 
 @login_required(login_url='account_signup')
 def edit_ride_request(request, request_id):
@@ -276,6 +287,7 @@ def edit_ride_request(request, request_id):
     else:
         form = RideRequestEditForm(instance=ride_request, max_seats=max_allowed)
     return render(request, 'rides/edit_ride_request.html', {'form': form, 'ride_request': ride_request})
+
 
 @login_required(login_url='account_signup')
 def cancel_ride_request(request, request_id):
@@ -320,6 +332,7 @@ def cancel_ride_request(request, request_id):
     else:
         return redirect('my_ride_requests')
 
+
 @login_required(login_url='account_signup')
 def approve_ride_request(request, request_id):
     """
@@ -345,6 +358,7 @@ def approve_ride_request(request, request_id):
     messages.success(request, 'Ride request approved and seats reserved.')
     return redirect('ride_detail', ride_id=ride.id)
 
+
 @login_required(login_url='account_signup')
 def reject_ride_request(request, request_id):
     """
@@ -366,6 +380,7 @@ def reject_ride_request(request, request_id):
         return redirect('ride_detail', ride_id=ride.id)
     # If GET, show a confirmation page (optional, not implemented here)
     return redirect('ride_detail', ride_id=ride.id)
+
 
 def about(request):
     """Render the About page."""
