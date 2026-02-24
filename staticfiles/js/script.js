@@ -67,6 +67,29 @@ function handleRideModal() {
         if (form && deleteUrl) {
             form.action = deleteUrl;
         }
+        // Set modal title, body, and confirm button text dynamically
+        const modalTitle = rideModal.querySelector(".modal-title");
+        const modalBody = document.getElementById("rideModalBody");
+        const confirmBtn = document.getElementById("rideModalConfirmBtn");
+        if (button && modalTitle && modalBody && confirmBtn) {
+            const actionText = button.textContent.trim(); // "Delete" or "Cancel"
+            if (actionText === "Delete") {
+                modalTitle.textContent = "Confirm Delete";
+                modalBody.textContent =
+                    "Are you sure you want to delete this ride?";
+                confirmBtn.textContent = "Yes, delete";
+            } else {
+                modalTitle.textContent = "Confirm Cancellation";
+                modalBody.innerHTML = `
+                    <p>Are you sure you want to cancel this ride? If cancelled:</p>
+                    <ul>
+                        <li>All passengers with existing ride requests will be notified</li>
+                        <li>Ride will be removed from active listings</li>
+                    </ul>
+                `;
+                confirmBtn.textContent = "Yes, cancel";
+            }
+        }
     });
 }
 

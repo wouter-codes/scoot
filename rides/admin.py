@@ -20,4 +20,3 @@ class RideRequestAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Rides)
 admin.site.register(RideRequest, RideRequestAdmin)
-# admin.site.register(UserProfile) --> For future implementation of user profiles
