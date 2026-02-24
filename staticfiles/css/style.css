@@ -203,6 +203,11 @@ form label {
     color: var(--fifth-color);
 }
 
+/* MODAL */
+.modal-title {
+    font-size: 1.5rem;
+}
+
 /* LOGIN & SIGNUP */
 /* Hide "Forgot your password" on the login page */
 .helptext {
