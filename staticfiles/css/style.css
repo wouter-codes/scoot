@@ -40,8 +40,13 @@ h3 {
     color: var(--primary-color);
 }
 
+h2.card-title,
 h3 {
     font-size: 1.3rem;
+}
+
+h2.passenger-request {
+    font-size: 1.1rem;
 }
 
 /* NAVBAR */

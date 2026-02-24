@@ -137,14 +137,14 @@
                         <li class="nav-item">
                             <a
                                 href="{% url 'account_signup' %}"
-                                class="btn btn-outline-light ms-lg-3 {% if request.path == signup_url %}active" aria-current="page {% endif %}"
+                                class="btn btn-outline-light ms-lg-3 {% if request.path == signup_url %}active" aria-current="page{% endif %}"
                                 >Sign Up</a
                             >
                         </li>
                         <li class="nav-item">
                             <a
                                 href="{% url 'account_login' %}"
-                                class="btn btn-light ms-lg-3 {% if request.path == login_url %}active" aria-current="page {% endif %}"
+                                class="btn btn-light ms-lg-3 {% if request.path == login_url %}active" aria-current="page{% endif %}"
                                 >Log In</a
                             >
                         </li>

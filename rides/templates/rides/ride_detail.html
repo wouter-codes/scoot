@@ -22,7 +22,7 @@
             {% endif %}
             <div class="card mb-4">
                 <div class="card-body">
-                    <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
+                    <h2 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h2>
                     <p class="card-text">
                         <strong>Date & Time:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
                         <strong>Available Seats:</strong> {{ ride.seats_available }}<br>
@@ -107,7 +107,7 @@
                 {% if user.is_authenticated and ride.driver == user and ride_requests %}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h3>Passenger Requests</h3>
+                        <h2 class="passenger-request">Passenger Requests</h2>
                     </div>
                     <div class="card-body">
                         <table class="table table-sm">
