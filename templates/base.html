@@ -225,7 +225,7 @@
         </footer>
 
         <!-- Ride Cancel/Delete Confirmation Modal (dynamic) -->
-        <div class="modal fade" id="rideModal" tabindex="-1" aria-labelledby="rideModalLabel" aria-hidden="true">
+        <div class="modal fade" id="rideModal" tabindex="-1" aria-labelledby="rideModalLabel" aria-hidden="true" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form id="rideForm" method="post">
@@ -247,10 +247,10 @@
         </div>
 
         <!-- Ride Request Cancel/Delete Confirmation Modal -->
-        <div class="modal fade" id="rideRequestModal" tabindex="-1" aria-labelledby="rideRequestModalLabel" aria-hidden="true">
+        <div class="modal fade" id="rideRequestModal" tabindex="-1" aria-labelledby="rideRequestModalLabel" aria-hidden="true" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="rideRequestForm" method="post" action="">
+                    <form id="rideRequestForm" method="post" action=".">
                         {% csrf_token %}
                         <div class="modal-header">
                             <h5 class="modal-title" id="rideRequestModalLabel">Confirm Cancellation</h5>
@@ -269,7 +269,7 @@
         </div>
 
         <!-- Publish Confirmation Modal -->
-        <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+        <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

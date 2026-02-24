@@ -4,7 +4,7 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6">
-            <h5 class="mb-3">
+            <p class="mb-3 back-link">
                 {% if user.is_authenticated and ride.driver == user %}
                     <a href="{% url 'my_rides' %}" class="text-decoration-none">&larr; Back to my rides</a>
                 {% elif ride_request %}
@@ -12,7 +12,7 @@
                 {% else %}
                     <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
                 {% endif %}
-            </h5>
+            </p>
             {% if ride_request %}
             <h1 class="mb-4">Ride Request Details</h1>
             {% elif user.is_authenticated and ride.driver == user %}
@@ -22,7 +22,7 @@
             {% endif %}
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                    <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
                     <p class="card-text">
                         <strong>Date & Time:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
                         <strong>Available Seats:</strong> {{ ride.seats_available }}<br>
@@ -107,7 +107,7 @@
                 {% if user.is_authenticated and ride.driver == user and ride_requests %}
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h5>Passenger Requests</h5>
+                        <h3>Passenger Requests</h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-sm">

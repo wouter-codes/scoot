@@ -40,6 +40,10 @@ h3 {
     color: var(--primary-color);
 }
 
+h3 {
+    font-size: 1.3rem;
+}
+
 /* NAVBAR */
 #navbar {
     background-color: var(--background-color-secondary);
@@ -172,6 +176,11 @@ form label {
 }
 
 /* LINKS */
+/* Larger font for back navigation link */
+.back-link {
+    font-size: 1.1rem;
+}
+
 .text-decoration-none {
     color: var(--background-color-tertiary);
 }

@@ -23,7 +23,7 @@
                                 <div class="card h-100">
                                     <a href="{% url 'ride_detail' ride.id %}" class="text-decoration-none card-link-wrapper">
                                         <div class="card-body text-dark">
-                                            <h5 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h5>
+                                            <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
                                             <p class="card-text">
                                                 <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
                                                 <strong>Seats:</strong> {{ ride.seats_available }}<br>

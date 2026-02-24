@@ -26,7 +26,6 @@ class RideSearchForm(forms.ModelForm):
         # Set placeholders and hide labels
         self.fields['origin'].widget.attrs['placeholder'] = 'Leaving from'
         self.fields['destination'].widget.attrs['placeholder'] = 'Going to'
-        self.fields['date'].widget.attrs['placeholder'] = 'On'
         self.fields['min_passengers'].widget.attrs['placeholder'] = 'Passengers'
 
         # Hide labels

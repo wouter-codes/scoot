@@ -2,11 +2,11 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-12">
-                        <h5 class="mb-3">
+                        <p class="mb-3 back-link">
                             <a href="{% url 'search_rides' %}" class="text-decoration-none">
                                 &larr; Back to all available rides
                             </a>
-                        </h5>
+                        </p>
                         <h1 class="mb-4">My Ride Requests</h1>
 
                         {% if accepted_requests or pending_requests or voided_requests %}
