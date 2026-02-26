@@ -7,7 +7,7 @@ from django.utils.html import mark_safe
 from django.urls import reverse
 
 from .models import Rides, RideRequest
-from .forms import RideSearchForm, RideCreateForm, RideRequestForm, RideRequestEditForm
+from .forms import RideSearchForm, RideForm, RideRequestForm, RideRequestEditForm
 
 
 def search_rides(request):
@@ -147,7 +147,7 @@ def create_ride(request):
     Handles both publishing and saving as draft, depending on which button is pressed.
     """
     if request.method == 'POST':
-        form = RideCreateForm(request.POST)
+        form = RideForm(request.POST)
         if form.is_valid():
             ride = form.save(commit=False)
             ride.driver = request.user
@@ -169,7 +169,7 @@ def create_ride(request):
         else:
             messages.error(request, 'Please correct the errors below to create your ride.')
     else:
-        form = RideCreateForm()
+        form = RideForm()
     return render(request, 'rides/create_ride.html', {'form': form})
 
 
@@ -181,7 +181,7 @@ def edit_ride(request, ride_id):
     """
     ride = get_object_or_404(Rides, id=ride_id)
     if ride.driver == request.user:
-        form = RideCreateForm(request.POST or None, instance=ride)
+        form = RideForm(request.POST or None, instance=ride)
         if request.method == 'POST':
             if form.is_valid():
                 ride = form.save(commit=False)

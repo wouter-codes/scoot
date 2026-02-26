@@ -6,14 +6,14 @@ from .models import Rides, RideRequest
 
 class RideSearchForm(forms.ModelForm):
     """Form for searching rides by origin, destination, date, and min passengers."""
-    
+
     min_passengers = forms.IntegerField(
         min_value=1,
         max_value=5,
         required=False,
         label='Passengers',
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['date'].required = False
@@ -46,7 +46,7 @@ class RideSearchForm(forms.ModelForm):
                 Column(Submit('submit', 'Search', css_class='btn-primary search-btn w-100'), css_class='col-12 col-lg-2'),
             )
         )
-    
+
     class Meta:
         model = Rides
         fields = ['origin', 'destination', 'date']
@@ -54,7 +54,7 @@ class RideSearchForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'})
         }
 
-class RideCreateForm(forms.ModelForm):
+class RideForm(forms.ModelForm):
     """Form for creating a new ride listing."""
     def clean_origin(self):
         origin = self.cleaned_data.get('origin', '')
@@ -67,7 +67,7 @@ class RideCreateForm(forms.ModelForm):
         if len(destination.strip()) < 3:
             raise forms.ValidationError('Destination must be at least 3 characters.')
         return destination    
-    
+
     def clean_date(self):
         date = self.cleaned_data.get('date')
         if not date:
@@ -96,7 +96,7 @@ class RideCreateForm(forms.ModelForm):
         self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-    
+
     class Meta:
         model = Rides
         fields = ['origin', 'destination', 'date', 'seats_available', 'pickup_notes']
