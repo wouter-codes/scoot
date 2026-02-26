@@ -23,22 +23,22 @@ class RidesModelTest(TestCase):
         )
 
     def test_ride_str_method(self):
-        # Test the string representation of the Rides model
+        """Test the string representation of the Rides model."""
         expected_str = f"{self.ride.origin} to {self.ride.destination} on {self.ride.date.strftime('%Y-%m-%d %H:%M')} - {self.ride.seats_available} seats"
         self.assertEqual(str(self.ride), expected_str)
 
     def test_ride_clean_method(self):
-        # Test that the clean method raises a ValidationError when origin and destination are the same
+        """Test that the clean method raises a ValidationError when origin and destination are the same."""
         self.ride.destination = self.ride.origin
         with self.assertRaises(ValidationError):
             self.ride.clean()
 
     def test_ride_meta_ordering(self):
-        # Test that the default ordering is descending by created_on
+        """Test that the default ordering is descending by created_on."""
         self.assertEqual(Rides._meta.ordering, ['-created_on'])
 
     def test_default_values(self):
-        # Test that default values are set correctly when not provided
+        """Test that default values are set correctly when not provided."""
         default_value_test_ride = Rides.objects.create(
             driver=self.user,
             origin=self.ride.origin,
@@ -50,7 +50,7 @@ class RidesModelTest(TestCase):
         self.assertEqual(default_value_test_ride.status, '0')
 
     def test_pickup_notes_required_or_blank(self):
-        # Test if pickup_notes is required or can be blank
+        """Test if pickup_notes is required or can be blank."""
         ride_with_blank_notes = Rides.objects.create(
             driver=self.user,
             origin=self.ride.origin,
@@ -62,13 +62,13 @@ class RidesModelTest(TestCase):
         self.assertEqual(ride_with_blank_notes.pickup_notes, '')
 
     def test_created_on_and_updated_on_auto_fields(self):
-        # Test that created_on and updated_on are set automatically
+        """Test that created_on and updated_on are set automatically."""
         self.assertIsNotNone(self.ride.created_on)
         self.assertIsNotNone(self.ride.updated_on)
 
     # Tests for the validate_future_date function
     def test_validate_future_date_with_past_date(self):
-        # Test that a past date raises a ValidationError
+        """Test that a past date raises a ValidationError."""
         past_date = make_aware(datetime(2000, 1, 1, 10, 0))
         with self.assertRaises(ValidationError):
             validate_future_date(past_date)
@@ -96,12 +96,12 @@ class RideRequestModelTest(TestCase):
         )
 
     def test_ride_request_str_method(self):
-        # Test the string representation of the RideRequest model
+        """Test the string representation of the RideRequest model."""
         expected_str = f"Ride ID:{self.ride.id} | RideRequest by {self.user.username} for ride from {self.ride.origin} to {self.ride.destination} - Status: {self.ride_request.get_status_display()}"
         self.assertEqual(str(self.ride_request), expected_str)
 
     def test_ride_request_unique_together(self):
-        # Test that creating a duplicate ride request for the same passenger and ride raises an error
+        """Test that creating a duplicate ride request for the same passenger and ride raises an error."""
         with self.assertRaises(IntegrityError):
             RideRequest.objects.create(
                 passenger=self.user,
@@ -111,17 +111,17 @@ class RideRequestModelTest(TestCase):
             )
 
     def test_ride_request_status_choices(self):
-        # Test that the status field only accepts valid choices
+        """Test that the status field only accepts valid choices."""
         with self.assertRaises(ValidationError):
             self.ride_request.status = 'invalid_status'
             self.ride_request.full_clean()  # This will trigger validation
 
     def test_ride_request_meta_ordering(self):
-        # Test that the default ordering is descending by created_on
+        """Test that the default ordering is descending by created_on."""
         self.assertEqual(RideRequest._meta.ordering, ['-created_on'])
 
     def test_default_values(self):
-        # Test that default values are set correctly when not provided
+        """Test that default values are set correctly when not provided."""
         new_ride = Rides.objects.create(
             driver=self.user,
             origin='Somewhere',
@@ -139,7 +139,7 @@ class RideRequestModelTest(TestCase):
         self.assertEqual(default_value_test_request.status, '0')
 
     def test_seats_requested_min_max_validation(self):
-        # Test that seats_requested enforces min and max value validation
+        """Test that seats_requested enforces min and max value validation."""
         with self.assertRaises(ValidationError):
             self.ride_request.seats_requested = 0
             self.ride_request.full_clean()  # This will trigger validation
@@ -148,7 +148,7 @@ class RideRequestModelTest(TestCase):
             self.ride_request.full_clean()  # This will trigger validation
 
     def test_created_on_and_updated_on_auto_fields(self):
-        # Test that created_on and updated_on are set automatically
+        """Test that created_on and updated_on are set automatically."""
         self.assertIsNotNone(self.ride_request.created_on)
         self.assertIsNotNone(self.ride_request.updated_on)
 
@@ -177,7 +177,7 @@ class RidesQuerySetTest(TestCase):
         )
 
     def test_apply_search_filters_with_valid_form(self):
-        # Create a valid form with search criteria
+        """Create a valid form with search criteria."""
         form_data = {
             'origin': 'Leiden',
             'destination': 'Delft',
@@ -190,7 +190,7 @@ class RidesQuerySetTest(TestCase):
         self.assertNotIn(self.ride2, queryset)
 
     def test_apply_search_filters_with_invalid_form(self):
-        # Create an invalid form (e.g., missing required fields)
+        """Create an invalid form (e.g., missing required fields)."""
         form_data = {
             'origin': '',
             'destination': '',
@@ -204,7 +204,7 @@ class RidesQuerySetTest(TestCase):
         self.assertIn(self.ride2, queryset)
 
     def test_apply_search_filters_with_partial_filters(self):
-        # Create a form with only origin filter
+        """Create a form with only origin filter."""
         form_data = {
             'origin': 'Leiden',
             'destination': '',
