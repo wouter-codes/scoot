@@ -122,6 +122,31 @@ h2.passenger-request {
 }
 
 /* LOGO AND BRANDING */
+/* Hero image */
+#hero-image {
+    filter: invert(100%);
+    width: 100%;
+    height: auto;
+    max-width: 350px;
+}
+
+#slogan {
+    color: var(--background-color-quaternary);
+    padding-left: 10px;
+    text-shadow: 1px 1px 1px rgba(0.3, 0.3, 0.3, 0.3);
+}
+
+#sub-slogan {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+#sub-title {
+    font-family: var(--tertiary-font);
+    font-size: 5rem;
+    color: var(--primary-color);
+}
+
 #logo-title {
     font-family: var(--tertiary-font);
     font-size: 3rem;
@@ -249,6 +274,11 @@ input[name="email"] {
         min-width: 33%;
     }
 }
+
+@media (max-width: 768px) {
+    #sub-slogan {
+        font-size: 1.2rem;
+    }
 
 @media (max-width: 992px) {
     .search-btn {

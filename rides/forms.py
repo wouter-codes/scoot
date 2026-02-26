@@ -33,6 +33,10 @@ class RideSearchForm(forms.ModelForm):
         self.fields['date'].label = 'Date of travel'
         self.fields['min_passengers'].label = 'Amount of passengers '
 
+        # Make leaving from and going to optional for search form
+        self.fields['origin'].required = False
+        self.fields['destination'].required = False
+
         # Initialize crispy form helper and layout
         self.helper = FormHelper()
         self.helper.form_method = 'get'

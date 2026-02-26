@@ -9,6 +9,28 @@ from django.urls import reverse
 from .models import Rides, RideRequest
 from .forms import RideSearchForm, RideForm, RideRequestForm, RideRequestEditForm
 
+def homepage(request):
+    """
+    Show index.html for unauthenticated users, search_rides.html for authenticated users.
+    """
+    form = RideSearchForm(request.GET or None)
+    if not request.user.is_authenticated:
+        rides = Rides.objects.filter(
+            date__gt=timezone.now(),
+            seats_available__gt=0,
+            status='1'
+        )
+        rides = rides.apply_search_filters(form)
+        user_request_ids = set()
+        rides = rides.order_by('date')
+        context = {
+            'form': form,
+            'rides': rides,
+            'user_request_ids': user_request_ids
+        }
+        return render(request, 'rides/index.html', context)
+    else:
+        return search_rides(request)
 
 def search_rides(request):
     """

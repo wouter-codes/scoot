@@ -68,15 +68,14 @@ class TestRideSearchForm(TestCase):
         self.assertTrue(form.is_valid(), msg="Form should be valid with correct data")
 
     def test_search_form_invalid_data(self):
-        """ Test that form is invalid with incorrect data """
+        """ Test that form is valid with empty origin and destination (fields optional) """
         form = RideSearchForm(data=self.invalid_data)
-        self.assertFalse(form.is_valid(), msg="Form should be invalid with incorrect data")
+        self.assertTrue(form.is_valid(), msg="Form should be valid when origin and destination are empty")
 
     def test_search_form_partial_data(self):
-        """Test that form is invalid with partial data (only origin) since destination is required."""
+        """Test that form is valid with partial data (only origin, destination empty) since fields are optional."""
         form = RideSearchForm(data=self.partial_data)
-        self.assertFalse(form.is_valid(), msg="Form should be invalid when destination is missing")
-        self.assertIn('destination', form.errors, msg="destination field should have errors when missing")
+        self.assertTrue(form.is_valid(), msg="Form should be valid when destination is empty")
 
     def test_min_passengers_boundary_values(self):
         """Test min_passengers at its minimum and maximum allowed values."""

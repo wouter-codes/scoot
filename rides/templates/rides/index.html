@@ -1,4 +1,23 @@
-{% extends "base.html" %} {% load static %} {% load crispy_forms_tags %} {% block content %}
+
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if not request.GET %}
+<div class="container hide-when-searched mt-3">
+    <div class="row">
+        <div class="col-12 col-md-8 d-flex flex-column justify-content-center align-items-end">
+            <h1 class="text-end">Need a lift?</h1>
+            <h1 class="text-end" id="slogan"><strong>Scoot with a local!</strong></h1>
+            <h2 class="text-end" id="sub-slogan">Being carless in Cornwall can be hard. Your neighbours make it easy.</h2>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+            <img src="{% static 'images/scoot_hero.png' %}" alt="Scoot - Local Ridesharing in Cornwall" class="img-fluid rounded" id="hero-image">
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <!-- Search Form Section -->
 <div class="container my-3">
@@ -10,8 +29,26 @@
     </div>
 </div>
 
+{% if not request.GET %}
+<div class="container hide-when-searched">
+    <div class="row">
+        <div class="col-12 col-lg-8 mx-auto text-center">
+            <h2 id="sub-title"><strong>Scoot</strong><br></h2><h2>Cornwall's local ridesharing app.</h2>
+        </div>
+    </div>
+
+<div class="container hide-when-searched my-3">
+    <div class="row">
+         <div class="col-12 text-center">
+            <p>Whether you need a lift to the shop, a social event, or a medical appointment, Scoot connects you with local drivers who can help you get there for free! It's simple: just search for rides in your area, hop on if you find one that fits your needs, and Scoot your way around Cornwall. No more delayed buses or spenny taxi fares — just locals helping locals get where they need to go.
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Results Section -->
-<div class="container my-5">
+<div class="container available-rides my-5" id="available-rides">
     <div class="row">
         <div class="col-12 text-center">
             {% if rides %}

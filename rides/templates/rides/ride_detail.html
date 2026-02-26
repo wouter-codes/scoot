@@ -10,7 +10,11 @@
                 {% elif ride_request %}
                     <a href="{% url 'my_ride_requests' %}" class="text-decoration-none">&larr; See all requested rides</a>
                 {% else %}
-                    <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'search_rides' %}" class="text-decoration-none">&larr; Back to all available rides</a>
+                    {% else %}
+                        <a href="{% url 'homepage' %}" class="text-decoration-none">&larr; Back to all available rides</a>
+                    {% endif %}
                 {% endif %}
             </p>
             {% if ride_request %}

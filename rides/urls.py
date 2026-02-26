@@ -2,7 +2,8 @@ from django.urls import path # import path, similar to project's urls.py
 from . import views # import views.py from the current directory
 
 urlpatterns = [
-    path('', views.search_rides, name='search_rides'),
+    path('', views.homepage, name='homepage'),
+    path('search_rides/', views.search_rides, name='search_rides'),
     path('create-ride/', views.create_ride, name='create_ride'),
     path('rides/<int:ride_id>/', views.ride_detail, name='ride_detail'),
     path('rides/<int:ride_id>/edit/', views.edit_ride, name='edit_ride'),
