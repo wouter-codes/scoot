@@ -34,6 +34,7 @@ class TestRideRequestForm(TestCase):
         self.assertIn('seats_requested', form.errors, msg="seats_requested field should have errors when missing")
 
 class TestRideSearchForm(TestCase):
+    
     def setUp(self):
         """Set up valid and invalid data for testing RideSearchForm."""
         self.valid_data = {
@@ -88,6 +89,24 @@ class TestRideSearchForm(TestCase):
         form = RideSearchForm(data={**self.valid_data, 'min_passengers': 0})
         self.assertFalse(form.is_valid(), msg="Form should be invalid when min_passengers is 0")
 
+    def test_origin_destination_alphabetic_validation(self):
+        """Test that origin and destination must contain only alphabetic characters and spaces."""
+        form = RideSearchForm(data={**self.valid_data, 'origin': 'Leiden123'})
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when origin contains numbers")
+        self.assertIn('origin', form.errors, msg="origin field should have errors when containing numbers")
+
+        form = RideSearchForm(data={**self.valid_data, 'destination': 'Delft!@#'})
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when destination contains special characters")
+        self.assertIn('destination', form.errors, msg="destination field should have errors when containing special characters")
+
+    def test_search_form_date_in_past(self):
+        """Test that RideSearchForm is invalid when date is in the past."""
+        past_date = '2020-01-01'
+        data = {**self.valid_data, 'date': past_date}
+        form = RideSearchForm(data=data)
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when date is in the past")
+        self.assertIn('date', form.errors, msg="date field should have errors when in the past")
+
 class TestRideForm(TestCase):
 
     def setUp(self):
@@ -121,11 +140,29 @@ class TestRideForm(TestCase):
         self.assertFalse(form.is_valid(), msg="Form should be invalid when destination is less than 3 characters")
         self.assertIn('destination', form.errors, msg="destination field should have errors when too short")
 
+    def test_origin_destination_alphabetic_validation(self):
+        """Test that origin and destination must contain only alphabetic characters and spaces."""
+        form = RideForm(data={**self.valid_data, 'origin': 'Amsterdam123'})
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when origin contains numbers")
+        self.assertIn('origin', form.errors, msg="origin field should have errors when containing numbers")
+
+        form = RideForm(data={**self.valid_data, 'destination': 'Rotterdam!@#'})
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when destination contains special characters")
+        self.assertIn('destination', form.errors, msg="destination field should have errors when containing special characters")
+
     def test_date_required_validation(self):
         """ Test that date field is required """
         form = RideForm(data={**self.invalid_data, 'date': ''})
         self.assertFalse(form.is_valid(), msg="Form should be invalid when date is missing")
         self.assertIn('date', form.errors, msg="date field should have errors when missing")
+
+    def test_ride_form_date_in_past(self):
+        """Test that RideForm is invalid when date is in the past."""
+        past_date = '2020-01-01T10:00'
+        data = {**self.valid_data, 'date': past_date}
+        form = RideForm(data=data)
+        self.assertFalse(form.is_valid(), msg="Form should be invalid when date is in the past")
+        self.assertIn('date', form.errors, msg="date field should have errors when in the past")
 
     def test_seats_available_min_max_validation(self):
         """ Test that seats_available field must be between 1 and 4 """
