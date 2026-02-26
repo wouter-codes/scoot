@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import dj_database_url
 import os
 import sys
+import dj_database_url
+
 if os.path.isfile('env.py'): # This file does not exist on the deployed version
     import env
 from django.contrib.messages import constants as messages

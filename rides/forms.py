@@ -29,13 +29,14 @@ class RideSearchForm(forms.ModelForm):
         self.fields['min_passengers'].widget.attrs['placeholder'] = 'Passengers'
 
         # Hide labels
-        self.fields['origin'].label = ''
-        self.fields['destination'].label = ''
-        self.fields['date'].label = ''
-        self.fields['min_passengers'].label = ''
+        self.fields['origin'].label = 'Leaving from'
+        self.fields['destination'].label = 'Going to'
+        self.fields['date'].label = 'Date of travel'
+        self.fields['min_passengers'].label = 'Amount of passengers '
 
         self.helper = FormHelper()
         self.helper.form_method = 'get'
+        self.helper.form_class = 'search-rides-form'
         self.helper.layout = Layout(
             Row(
                 Column('origin', css_class='col-12 col-lg-3'),
