@@ -1,12 +1,17 @@
-import datetime, re
+import datetime
+import re
 from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Row, Column, Layout
 from .models import Rides, RideRequest
 
+
 class RideSearchForm(forms.ModelForm):
-    """Form for searching rides by origin, destination, date, and min passengers."""
+    """
+    Form for searching rides by origin,
+    destination, date, and min passengers.
+    """
 
     min_passengers = forms.IntegerField(
         min_value=1,
@@ -17,7 +22,8 @@ class RideSearchForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        Initialize RideSearchForm, set field requirements, placeholders, labels, and crispy form layout.
+        Initialize RideSearchForm, set field requirements,
+        placeholders, labels, and crispy form layout.
         """
         super().__init__(*args, **kwargs)
         self.fields['date'].required = False
@@ -25,13 +31,15 @@ class RideSearchForm(forms.ModelForm):
         # Set placeholders and hide labels
         self.fields['origin'].widget.attrs['placeholder'] = 'Leaving from'
         self.fields['destination'].widget.attrs['placeholder'] = 'Going to'
-        self.fields['min_passengers'].widget.attrs['placeholder'] = 'Passengers'
+        self.fields['min_passengers'].widget.attrs['placeholder'] = (
+            'Passengers'
+        )
 
         # Set field labels for accessibility (visually hidden in CSS)
         self.fields['origin'].label = 'Leaving from'
         self.fields['destination'].label = 'Going to'
         self.fields['date'].label = 'Date of travel'
-        self.fields['min_passengers'].label = 'Amount of passengers '
+        self.fields['min_passengers'].label = 'Amount of passengers'
 
         # Make leaving from and going to optional for search form
         self.fields['origin'].required = False
@@ -47,7 +55,13 @@ class RideSearchForm(forms.ModelForm):
                 Column('destination', css_class='col-12 col-lg-3'),
                 Column('date', css_class='col-12 col-lg-2'),
                 Column('min_passengers', css_class='col-12 col-lg-2'),
-                Column(Submit('submit', 'Search', css_class='btn-primary search-btn w-100'), css_class='col-12 col-lg-2'),
+                Column(
+                    Submit(
+                        'submit', 'Search',
+                        css_class='btn-primary search-btn w-100'
+                    ),
+                    css_class='col-12 col-lg-2'
+                ),
             )
         )
 
@@ -57,32 +71,38 @@ class RideSearchForm(forms.ModelForm):
         """
         origin = self.cleaned_data.get('origin', '')
         if origin and not re.match(r'^[A-Za-z\s]+$', origin):
-            raise forms.ValidationError('Origin must contain only alphabetic characters and spaces.')
+            raise forms.ValidationError(
+                'Origin must contain only alphabetic characters and spaces.'
+            )
         return origin
 
     def clean_destination(self):
         """
-        Validate that destination contains only alphabetic characters and spaces.
+        Validate that destination contains only alphabetic
+        characters and spaces.
         """
         destination = self.cleaned_data.get('destination', '')
         if destination and not re.match(r'^[A-Za-z\s]+$', destination):
-            raise forms.ValidationError('Destination must contain only alphabetic characters and spaces.')
+            raise forms.ValidationError(
+                'Destination must contain only alphabetic '
+                'characters and spaces.'
+            )
         return destination
 
     def clean_date(self):
         """
-        Always set today's date to one hour from now; for other dates, leave time as is.
+        Always set today's date to one hour from now;
+        for other dates, leave time as is.
         """
         date = self.cleaned_data.get('date')
         if not date:
             return date
-    
+
         # if date is today, set time to one hour from now
         if date.date() == timezone.now().date():
             now = timezone.now()
             return now + datetime.timedelta(hours=1)
-        else:
-            return date
+        return date
 
     class Meta:
         model = Rides
@@ -91,29 +111,41 @@ class RideSearchForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'})
         }
 
+
 class RideForm(forms.ModelForm):
     """Form for creating a new or editing existing ride listing."""
     def clean_origin(self):
         """
-        Validate that origin is at least 3 characters and contains only alphabetic characters and spaces.
+        Validate that origin is at least 3 characters and
+        contains only alphabetic characters and spaces.
         """
         origin = self.cleaned_data.get('origin', '')
         if len(origin.strip()) < 3:
-            raise forms.ValidationError('Origin must be at least 3 characters.')
+            raise forms.ValidationError(
+                'Origin must be at least 3 characters.'
+            )
         if not re.match(r'^[A-Za-z\s]+$', origin):
-            raise forms.ValidationError('Origin must contain only alphabetic characters and spaces.')
+            raise forms.ValidationError(
+                'Origin must contain only alphabetic characters and spaces.'
+            )
         return origin
 
     def clean_destination(self):
         """
-        Validate that destination is at least 3 characters and contains only alphabetic characters and spaces.
+        Validate that destination is at least 3 characters and
+        contains only alphabetic characters and spaces.
         """
         destination = self.cleaned_data.get('destination', '')
         if len(destination.strip()) < 3:
-            raise forms.ValidationError('Destination must be at least 3 characters.')
+            raise forms.ValidationError(
+                'Destination must be at least 3 characters.'
+            )
         if not re.match(r'^[A-Za-z\s]+$', destination):
-            raise forms.ValidationError('Destination must contain only alphabetic characters and spaces.')
-        return destination    
+            raise forms.ValidationError(
+                'Destination must contain only alphabetic '
+                'characters and spaces.'
+            )
+        return destination
 
     def clean_date(self):
         """
@@ -121,7 +153,9 @@ class RideForm(forms.ModelForm):
         """
         date = self.cleaned_data.get('date')
         if not date:
-            raise forms.ValidationError('Please select a date and departure time.')
+            raise forms.ValidationError(
+                'Please select a date and departure time.'
+            )
         return date
 
     def clean_seats_available(self):
@@ -130,35 +164,48 @@ class RideForm(forms.ModelForm):
         """
         seats = self.cleaned_data.get('seats_available')
         if seats is None:
-            raise forms.ValidationError('Please specify the number of available seats.')
+            raise forms.ValidationError(
+                'Please specify the number of available seats.'
+            )
         if seats < 1:
             raise forms.ValidationError('You must offer at least 1 seat.')
         if seats > 4:
-            raise forms.ValidationError('You can offer a maximum of 4 seats.')
+            raise forms.ValidationError(
+                'You can offer a maximum of 4 seats.'
+            )
         return seats
 
     def __init__(self, *args, **kwargs):
         """
-        Initialize RideForm, set field requirements, placeholders, labels, and crispy form layout.
+        Initialize RideForm, set field requirements,
+        placeholders, labels, and crispy form layout.
         """
         super().__init__(*args, **kwargs)
-        # Set initial date to now rounded down to the nearest 15 minutes, no seconds
+        # Set initial date to now rounded down to the
+        # nearest 15 minutes, no seconds
         if not self.fields['date'].initial:
             now = timezone.now()
             minute = (now.minute // 15) * 15
             now = now.replace(minute=minute, second=0, microsecond=0)
             self.fields['date'].initial = now
-        
+
         # Set placeholders
         self.fields['origin'].widget.attrs['placeholder'] = 'e.g. Truro'
-        self.fields['destination'].widget.attrs['placeholder'] = 'e.g. Falmouth'
-        self.fields['pickup_notes'].widget.attrs['placeholder'] = 'e.g. Meet at the train station car park'
+        self.fields['destination'].widget.attrs['placeholder'] = (
+            'e.g. Falmouth'
+        )
+        self.fields['pickup_notes'].widget.attrs['placeholder'] = (
+            'e.g. Meet at the train station car park'
+        )
         self.helper = FormHelper()
         self.helper.form_method = 'post'
 
     class Meta:
         model = Rides
-        fields = ['origin', 'destination', 'date', 'seats_available', 'pickup_notes']
+        fields = [
+            'origin', 'destination', 'date',
+            'seats_available', 'pickup_notes'
+        ]
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'pickup_notes': forms.Textarea(attrs={'rows': 3}),
@@ -171,6 +218,7 @@ class RideForm(forms.ModelForm):
             'pickup_notes': 'Pickup Notes',
         }
 
+
 class RideRequestForm(forms.ModelForm):
     """Form for submitting a new ride request (number of seats)."""
     seats_requested = forms.ChoiceField(
@@ -180,7 +228,8 @@ class RideRequestForm(forms.ModelForm):
 
     def __init__(self, *args, max_seats=None, **kwargs):
         """
-        Initialize RideRequestForm, set seats_requested choices and crispy form layout.
+        Initialize RideRequestForm, set seats_requested choices
+        and crispy form layout.
         """
         super().__init__(*args, **kwargs)
         # Default to 4 if not provided
@@ -195,6 +244,7 @@ class RideRequestForm(forms.ModelForm):
         model = RideRequest
         fields = ['seats_requested']
 
+
 class RideRequestEditForm(forms.ModelForm):
     """Form for editing a ride request (seats_requested)."""
     seats_requested = forms.ChoiceField(
@@ -204,7 +254,8 @@ class RideRequestEditForm(forms.ModelForm):
 
     def __init__(self, *args, max_seats=None, **kwargs):
         """
-        Initialize RideRequestEditForm, set seats_requested choices and crispy form layout.
+        Initialize RideRequestEditForm, set seats_requested choices
+        and crispy form layout.
         """
         super().__init__(*args, **kwargs)
         # Default to 4 if not provided

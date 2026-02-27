@@ -7,10 +7,13 @@ from django.contrib.auth.models import User
 from rides.forms import RideSearchForm
 from .models import Rides, RideRequest, validate_future_date
 
+
 class RidesModelTest(TestCase):
     def setUp(self):
         # Create a test user
-        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.user = User.objects.create_user(
+            username='testuser', password='testpass'
+        )
         # Create a test ride
         self.ride = Rides.objects.create(
             driver=self.user,
@@ -24,11 +27,20 @@ class RidesModelTest(TestCase):
 
     def test_ride_str_method(self):
         """Test the string representation of the Rides model."""
-        expected_str = f"{self.ride.origin} to {self.ride.destination} on {self.ride.date.strftime('%Y-%m-%d %H:%M')} - {self.ride.seats_available} seats"
-        self.assertEqual(str(self.ride), expected_str)
+        expected_str = (
+            f"{self.ride.origin} to "
+            f"{self.ride.destination} on "
+            f"{self.ride.date.strftime('%Y-%m-%d %H:%M')} "
+            f"- {self.ride.seats_available} seats"
+        )
+        actual_str = str(self.ride)
+        self.assertEqual(actual_str, expected_str)
 
     def test_ride_clean_method(self):
-        """Test that the clean method raises a ValidationError when origin and destination are the same."""
+        """
+        Test that the clean method raises a ValidationError
+        when origin and destination are the same.
+        """
         self.ride.destination = self.ride.origin
         with self.assertRaises(ValidationError):
             self.ride.clean()
@@ -73,10 +85,13 @@ class RidesModelTest(TestCase):
         with self.assertRaises(ValidationError):
             validate_future_date(past_date)
 
+
 class RideRequestModelTest(TestCase):
     def setUp(self):
         # Create a test user
-        self.user = User.objects.create_user(username='testuser2', password='testpass')
+        self.user = User.objects.create_user(
+            username='testuser2', password='testpass'
+            )
         # Create a test ride
         self.ride = Rides.objects.create(
             driver=self.user,
@@ -97,11 +112,20 @@ class RideRequestModelTest(TestCase):
 
     def test_ride_request_str_method(self):
         """Test the string representation of the RideRequest model."""
-        expected_str = f"Ride ID:{self.ride.id} | RideRequest by {self.user.username} for ride from {self.ride.origin} to {self.ride.destination} - Status: {self.ride_request.get_status_display()}"
-        self.assertEqual(str(self.ride_request), expected_str)
+        expected_str = (
+            f"Ride ID:{self.ride.id} | RideRequest "
+            f"by {self.user.username} for ride from {self.ride.origin} "
+            f"to {self.ride.destination} - Status: "
+            f"{self.ride_request.get_status_display()}"
+        )
+        actual_str = str(self.ride_request)
+        self.assertEqual(actual_str, expected_str)
 
     def test_ride_request_unique_together(self):
-        """Test that creating a duplicate ride request for the same passenger and ride raises an error."""
+        """
+        Test that creating a duplicate ride request for
+        the same passenger and ride raises an error.
+        """
         with self.assertRaises(IntegrityError):
             RideRequest.objects.create(
                 passenger=self.user,
@@ -152,10 +176,13 @@ class RideRequestModelTest(TestCase):
         self.assertIsNotNone(self.ride_request.created_on)
         self.assertIsNotNone(self.ride_request.updated_on)
 
+
 class RidesQuerySetTest(TestCase):
     def setUp(self):
         # Create a test user
-        self.user = User.objects.create_user(username='queryuser', password='testpass')
+        self.user = User.objects.create_user(
+            username='queryuser', password='testpass'
+            )
         # Create multiple rides for queryset filtering
         self.ride1 = Rides.objects.create(
             driver=self.user,

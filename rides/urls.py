@@ -1,5 +1,5 @@
-from django.urls import path # import path, similar to project's urls.py
-from . import views # import views.py from the current directory
+from django.urls import path  # import path, similar to project's urls.py
+from . import views  # import views.py from the current directory
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
@@ -8,13 +8,37 @@ urlpatterns = [
     path('rides/<int:ride_id>/', views.ride_detail, name='ride_detail'),
     path('rides/<int:ride_id>/edit/', views.edit_ride, name='edit_ride'),
     path('rides/<int:ride_id>/delete/', views.delete_ride, name='delete_ride'),
-    path('rides/<int:ride_id>/request/', views.request_ride, name='request_ride'),
-    path('booking/<int:request_id>/confirmation/', views.ride_request_confirmation, name='ride_request_confirmation'),
+    path(
+        'rides/<int:ride_id>/request/',
+        views.request_ride,
+        name='request_ride'
+    ),
+    path(
+        'booking/<int:request_id>/confirmation/',
+        views.ride_request_confirmation,
+        name='ride_request_confirmation'
+    ),
     path('my-rides/', views.my_rides, name='my_rides'),
     path('my-ride-requests/', views.my_ride_requests, name='my_ride_requests'),
-    path('ride-request/<int:request_id>/cancel/', views.cancel_ride_request, name='cancel_ride_request'),
-    path('ride-request/<int:request_id>/edit/', views.edit_ride_request, name='edit_ride_request'),
-    path('ride-request/<int:request_id>/approve/', views.approve_ride_request, name='approve_ride_request'),
-    path('ride-request/<int:request_id>/reject/', views.reject_ride_request, name='reject_ride_request'),
+    path(
+        'ride-request/<int:request_id>/cancel/',
+        views.cancel_ride_request,
+        name='cancel_ride_request'
+    ),
+    path(
+        'ride-request/<int:request_id>/edit/',
+        views.edit_ride_request,
+        name='edit_ride_request'
+    ),
+    path(
+        'ride-request/<int:request_id>/approve/',
+        views.approve_ride_request,
+        name='approve_ride_request'
+    ),
+    path(
+        'ride-request/<int:request_id>/reject/',
+        views.reject_ride_request,
+        name='reject_ride_request'
+    ),
     path('about/', views.about, name='about'),
 ]
