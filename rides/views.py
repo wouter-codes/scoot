@@ -128,7 +128,9 @@ def request_ride(request, ride_id):
     # Check if ride has available seats
     if ride.seats_available <= 0:
         messages.error(request, 'This ride has no available seats.')
-        return redirect('search_rides')
+        form = RideRequestForm(max_seats=0)
+        context = {'ride': ride, 'form': form}
+        return render(request, 'rides/request_ride.html', context)
 
     if request.method == 'POST':
         form = RideRequestForm(request.POST, max_seats=ride.seats_available)
@@ -288,7 +290,7 @@ def edit_ride_request(request, request_id):
     if request.method == 'POST':
         form = RideRequestEditForm(request.POST, instance=ride_request, max_seats=max_allowed)
         if form.is_valid():
-            new_seats = form.cleaned_data['seats_requested']
+            new_seats = int(form.cleaned_data['seats_requested'])
             max_allowed = ride.seats_available + old_seats
             if new_seats > max_allowed:
                 messages.error(request, f'Only {max_allowed} seats are available to request for this ride.')
@@ -331,10 +333,7 @@ def cancel_ride_request(request, request_id):
             ride.seats_available += ride_request.seats_requested
             ride.save()
             # Set status to cancelled by passenger or driver
-            if request.user == ride_request.passenger:
-                ride_request.status = '3'  # Cancelled by passenger
-            else:
-                ride_request.status = '5'  # Cancelled by driver
+            ride_request.status = 'cancelled'
             ride_request.save()
             messages.success(request, 'The approved ride request was cancelled and the seat(s) restored.')
         elif ride_request.status == '0':
@@ -375,7 +374,7 @@ def approve_ride_request(request, request_id):
     # Approve and deduct seats
     ride.seats_available -= ride_request.seats_requested
     ride.save()
-    ride_request.status = '1'  # Approved
+    ride_request.status = '1'  # '1' means Accepted/Approved in RideRequest model
     ride_request.save()
     messages.success(request, 'Ride request approved and seats reserved.')
     return redirect('ride_detail', ride_id=ride.id)
@@ -396,7 +395,7 @@ def reject_ride_request(request, request_id):
         messages.error(request, 'Only pending requests can be rejected.')
         return redirect('ride_detail', ride_id=ride.id)
     if request.method == 'POST':
-        ride_request.status = '2'  # Rejected
+        ride_request.status = '2'  # '2' means Rejected in RideRequest model
         ride_request.save()
         messages.success(request, 'Ride request rejected.')
         return redirect('ride_detail', ride_id=ride.id)
