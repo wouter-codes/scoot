@@ -1,7 +1,7 @@
 {# Partial template for displaying a single ride card in ride lists (used in my_rides.html) #}
 <div class="col-12 col-md-6 col-xl-4 mb-4">
     <div class="card h-100 card-link-wrapper" role="group">
-        <div class="card-body text-dark" onclick="window.location.href='{% url 'ride_detail' ride.id %}'" style="cursor:pointer" aria-label="View ride details for {{ ride.origin }} to {{ ride.destination }}">
+        <div class="card-body text-dark" onclick="window.location.href='{% url 'ride_detail' ride.id %}'" style="cursor:pointer" role="button" aria-label="View ride details for {{ ride.origin }} to {{ ride.destination }}">
             <h3 class="card-title">{{ ride.origin }} → {{ ride.destination }}</h3>
             <p class="card-text">
                 <strong>Date:</strong> {{ ride.date|date:"d M Y, H:i" }}<br>
